@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Datascience, tools and datasets</title>
+    <link>https://scox3.github.io/post/</link>
+    <description>Recent content in Posts on Datascience, tools and datasets</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>(c) Vladislav Borkus</copyright>
+    <lastBuildDate>Mon, 22 Mar 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Strava tracks analysis in R</title>
+      <link>https://scox3.github.io/post/2021-03-22-gps-velo-en/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/post/2021-03-22-gps-velo-en/</guid>
+      <description>I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.
+Libraries 1. We will need special package XML2 to load data in the XLM formats, the package geosphere to calculate distances on Earth&amp;rsquo;s surface and the set of packages to draw tracks on Google Maps.</description>
+    </item>
+    
+    <item>
+      <title>Blog with R and Hugo</title>
+      <link>https://scox3.github.io/post/2021-03-19-blog_with-hugo/</link>
+      <pubDate>Fri, 19 Mar 2021 20:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/post/2021-03-19-blog_with-hugo/</guid>
+      <description>Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.
+Basic local setup To create a local copy of the future blog:</description>
+    </item>
+    
+    <item>
+      <title>Rmarkdown nightmares (updated)</title>
+      <link>https://scox3.github.io/post/2021-03-18-rmarkdown-nightnames/</link>
+      <pubDate>Thu, 18 Mar 2021 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/post/2021-03-18-rmarkdown-nightnames/</guid>
+      <description>Setup 1. Show whitespaces. It would be clever to check the option &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Display-&amp;gt;Show whitespace characters&amp;rdquo; in RStudio. Otherwise you will never know how many whitespaces you put at the end of a line, and then you may spend a lot of time figuring errors in paragraphs formatting. The rule of two spaces to end a paragraph is not the best feature of the markup language.
+2. UTF8. If you use languages other than English to write your posts, do not forget to check &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Saving-&amp;gt;Default&amp;rdquo; to set text encoding to UTF8, otherwise knitr will produce gibberish.</description>
+    </item>
+    
+  </channel>
+</rss>

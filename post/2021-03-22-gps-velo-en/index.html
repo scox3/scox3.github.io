@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Strava tracks analysis in R - Datascience, tools and datasets</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Vladislav Borkus" /><meta name="description" content="I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.
+Libraries 1. We will need special package XML2 to load data in the XLM formats, the package geosphere to calculate distances on Earth&amp;rsquo;s surface and the set of packages to draw tracks on Google Maps." /><meta name="keywords" content="R, Data science, Econometrics" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="https://scox3.github.io/post/2021-03-22-gps-velo-en/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.3a5f39feb4252758bd7abbc1b9b9ca935d821cc19af111e1a22dcae852692ee0.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Strava tracks analysis in R" />
+<meta property="og:description" content="I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.
+Libraries 1. We will need special package XML2 to load data in the XLM formats, the package geosphere to calculate distances on Earth&rsquo;s surface and the set of packages to draw tracks on Google Maps." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://scox3.github.io/post/2021-03-22-gps-velo-en/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-03-22T10:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2021-03-22T10:00:00&#43;00:00" /><meta property="og:site_name" content="Datascience, tools and datasets" />
+
+<meta itemprop="name" content="Strava tracks analysis in R">
+<meta itemprop="description" content="I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.
+Libraries 1. We will need special package XML2 to load data in the XLM formats, the package geosphere to calculate distances on Earth&rsquo;s surface and the set of packages to draw tracks on Google Maps."><meta itemprop="datePublished" content="2021-03-22T10:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-03-22T10:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2938">
+<meta itemprop="keywords" content="R,RStudio,GPS,Sport,Tools,Howto,GoogleMaps,Packages,Strava," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Strava tracks analysis in R"/>
+<meta name="twitter:description" content="I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.
+Libraries 1. We will need special package XML2 to load data in the XLM formats, the package geosphere to calculate distances on Earth&rsquo;s surface and the set of packages to draw tracks on Google Maps."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Data science, tools and datasets</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-03-22-gps-velo-en/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Data science, tools and datasets</a>
+</div>
+
+
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-03-22-gps-velo-en/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Strava tracks analysis in R</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-03-22 </span>
+        <div class="post-category">
+            <a href="/categories/r/"> R </a>
+            <a href="/categories/rstudio/"> RStudio </a>
+            <a href="/categories/howto/"> Howto </a>
+            <a href="/categories/packages/"> Packages </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#libraries">Libraries</a></li>
+        <li><a href="#data-loading">Data loading</a></li>
+        <li><a href="#dynamics">Dynamics</a></li>
+        <li><a href="#pulse">Pulse</a></li>
+        <li><a href="#vizualization-on-google-maps">Vizualization on Google maps</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.</p>
+<h2 id="libraries">Libraries</h2>
+<p>1. We will need special package <em>XML2</em> to load data in the XLM formats, the package <em>geosphere</em> to calculate distances on Earth&rsquo;s surface and the set of packages to draw tracks on Google Maps.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Common packages</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">xml2</span><span class="p">)</span>
+
+<span class="c1">#Package for geosphere calculations</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">geosphere</span><span class="p">)</span>
+
+<span class="c1">#Packages for grawing maps</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">Imap</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggmap</span><span class="p">)</span>
+</code></pre></div><h2 id="data-loading">Data loading</h2>
+<p>2. Usually two formats are used to pack run/bike track data: TCX (is used by Endomondo) and GPX (Garmin, Strava).</p>
+<p>To load data in these formats I defined two functions. Both of them use the package <em>XML2</em> to parse XML structures. This package uses XPath language queries to look for graph nodes and to get information from them. The following rule applies: if an XPath string is started with &lsquo;\\&rsquo; then these functions do global search in all parts of the document over wise they do search only within the chosen node.</p>
+<p>The following functions are used:</p>
+<ul>
+<li><code>xml_ns_strip()</code> cleans the document from the default namespace markers;</li>
+<li><code>xml_find_first()</code> finds the first XML node that satisfies the search criteria;</li>
+<li><code>xml_find_all()</code> returns a list of all nodes that satisfy the search criteria;</li>
+<li><code>xml_children()</code> returns all child nodes of the selected node;</li>
+<li><code>xml_text()</code> extracts the selected node&rsquo;s text;</li>
+<li>`xml_attr() extracts the selected node&rsquo;s attributes.</li>
+</ul>
+<p>All extracted data are stored into a set of <em>data.frames</em>, which are then glued in one big <em>data.frame</em> by call to <em>rbindlist</em> function from the package <em>data.table</em>.</p>
+<p>As a sample data I will use the tracks from my trainings on XC-trails in the Butovo forest in Moscow region (Chess Park).</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">##Load libraries</span>
+
+<span class="n">load_tcx</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">gethr</span> <span class="o">=</span> <span class="kc">FALSE</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">dat1</span> <span class="o">&lt;-</span> <span class="nf">read_xml</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">NULL</span><span class="p">)</span>
+  
+  <span class="nf">xml_ns_strip</span><span class="p">(</span> <span class="n">dat1</span> <span class="p">)</span>
+  
+  <span class="c1">#Find the first track subtree</span>
+  <span class="n">track1</span> <span class="o">&lt;-</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">dat1</span><span class="p">,</span> <span class="s">&#34;//Track&#34;</span><span class="p">)</span>
+  
+<span class="c1">#  lapply( xml_find_all(track1, &#34;//Trackpoint&#34;), print )</span>
+  
+  <span class="n">tpt</span> <span class="o">&lt;-</span> <span class="nf">xml_find_all</span><span class="p">(</span><span class="n">track1</span><span class="p">,</span> <span class="s">&#34;Trackpoint&#34;</span><span class="p">)</span>
+  <span class="n">df1</span> <span class="o">&lt;-</span> <span class="nf">rbindlist </span><span class="p">(</span> <span class="nf">lapply</span><span class="p">(</span> <span class="n">tpt</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> 
+    <span class="p">{</span> 
+      <span class="nf">return</span><span class="p">(</span> 
+      <span class="nf">data.frame</span><span class="p">(</span> <span class="n">lat</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span><span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;Position/LatitudeDegrees&#34;</span><span class="p">))),</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;Position/LongitudeDegrees&#34;</span><span class="p">))),</span>
+        <span class="n">alt</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;AltitudeMeters&#34;</span><span class="p">))),</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nf">strptime</span><span class="p">(</span><span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;Time&#34;</span><span class="p">)),</span> <span class="n">format</span> <span class="o">=</span> <span class="s">&#34;%Y-%m-%dT%H:%M:%S&#34;</span><span class="p">),</span>
+        <span class="n">hr</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="s">&#34;HeartRateBpm/Value&#34;</span><span class="p">))),</span>
+        <span class="n">ds0_m</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;DistanceMeters&#34;</span><span class="p">))),</span>  
+        <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">))})</span>  <span class="p">)</span>   
+
+  <span class="nf">return</span><span class="p">(</span><span class="n">df1</span><span class="p">)</span>  
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">load_gpx</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">dat1</span> <span class="o">&lt;-</span> <span class="nf">read_xml</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">NULL</span><span class="p">)</span>
+  
+  <span class="nf">xml_ns_strip</span><span class="p">(</span> <span class="n">dat1</span> <span class="p">)</span>
+  
+  <span class="n">track1</span> <span class="o">&lt;-</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">dat1</span><span class="p">,</span> <span class="s">&#34;//trkseg&#34;</span><span class="p">)</span>
+
+  <span class="n">df1</span> <span class="o">&lt;-</span> <span class="nf">rbindlist </span><span class="p">(</span> <span class="nf">lapply</span><span class="p">(</span><span class="nf">xml_children</span><span class="p">(</span><span class="n">track1</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> 
+  <span class="p">{</span> <span class="nf">return</span><span class="p">(</span> 
+    <span class="nf">data.frame</span><span class="p">(</span> <span class="n">lat</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_attr</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="s">&#34;lat&#34;</span><span class="p">)</span> <span class="p">),</span>
+                <span class="n">lon</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_attr</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="s">&#34;lon&#34;</span><span class="p">)</span> <span class="p">),</span>
+                <span class="n">alt</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;ele&#34;</span><span class="p">))),</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="nf">strptime</span><span class="p">(</span><span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s">&#34;time&#34;</span><span class="p">)),</span> <span class="n">format</span> <span class="o">=</span> <span class="s">&#34;%Y-%m-%dT%H:%M:%S&#34;</span><span class="p">),</span>
+                <span class="n">hr</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="s">&#34;extensions/gpxtpx:TrackPointExtension/gpxtpx:hr&#34;</span><span class="p">))),</span>
+                <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">))})</span>  <span class="p">)</span>    
+
+  <span class="nf">return</span><span class="p">(</span><span class="n">df1</span><span class="p">)</span>  
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">data_folder</span> <span class="o">&lt;-</span> <span class="s">&#34;data/&#34;</span>
+<span class="n">df_tcx1</span> <span class="o">&lt;-</span> <span class="nf">load_tcx</span><span class="p">(</span> <span class="nf">paste0</span><span class="p">(</span> <span class="n">data_folder</span><span class="p">,</span> <span class="s">&#34;20190602_094835_Butovo_ChessPark.tcx&#34;</span> <span class="p">))</span>
+</code></pre></div><p>3. After the data are loaded they should be expanded by the calculated fields. I use the package <em>geosphere</em> to calculate distances and speeds on the geoglobe. This package supplies several methods to do so and I used the function <code>VincentyEllipsoid</code>.</p>
+<p>As the data are noisy they should be smoothed to be adequate to visualize. Initially I used lowess method for smoothing but it so happened that GPS-coordinates measurements are so much inaccurate in the forest that lowess yields senseless results. So I settled to compute the average speed over a number of points (nsmooth parameter in the code below). Quite good results are produced for averaging over ~90 seconds.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Вспомогательные функции</span>
+<span class="n">fwd_vec</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">v</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nf">return</span><span class="p">(</span> <span class="nf">c</span><span class="p">(</span> <span class="n">v[</span> <span class="m">-1</span> <span class="n">]</span><span class="p">,</span> <span class="n">v[</span> <span class="nf">length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="n">]</span> <span class="p">))</span>
+<span class="p">}</span>
+
+<span class="n">lag_vec</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">v</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nf">return</span><span class="p">(</span> <span class="nf">c</span><span class="p">(</span> <span class="n">v[1]</span><span class="p">,</span> <span class="n">v[</span> <span class="m">1</span><span class="o">:</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="m">-1</span><span class="p">)</span><span class="n">]</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="c1">#Average speed calcutation</span>
+<span class="n">av_speed</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">cumdist</span><span class="p">,</span> <span class="n">cumtime</span><span class="p">,</span> <span class="n">nsmooth</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">v</span> <span class="o">&lt;-</span> <span class="nf">diff</span><span class="p">(</span><span class="n">cumdist</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">nsmooth</span><span class="p">)</span><span class="o">/</span><span class="nf">diff</span><span class="p">(</span><span class="n">cumtime</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">nsmooth</span><span class="p">)</span>
+  <span class="nf">return</span><span class="p">(</span> <span class="nf">c</span><span class="p">(</span> <span class="nf">rep</span><span class="p">(</span> <span class="n">v[1]</span><span class="p">,</span> <span class="nf">floor</span><span class="p">(</span><span class="n">nsmooth</span><span class="o">/</span><span class="m">2</span><span class="p">)),</span> <span class="n">v</span><span class="p">,</span> <span class="nf">rep</span><span class="p">(</span><span class="n">v</span><span class="nf">[length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="n">]</span><span class="p">,</span><span class="n">nsmooth</span> <span class="o">-</span> <span class="nf">floor</span><span class="p">(</span><span class="n">nsmooth</span><span class="o">/</span><span class="m">2</span><span class="p">))))</span>
+<span class="p">}</span>
+
+<span class="c1">#Optimal number of points to smooth</span>
+<span class="n">opt_nsmooth</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">){</span>
+  <span class="c1">#Optimal number of point to smooth - 90 sec </span>
+  <span class="nf">return </span><span class="p">(</span><span class="nf">as.integer</span><span class="p">(</span><span class="m">90</span><span class="o">/</span><span class="nf">as.numeric</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span> <span class="nf">diff</span><span class="p">(</span> <span class="n">df</span><span class="o">$</span><span class="n">t</span><span class="p">)))))</span>
+  
+<span class="p">}</span>
+
+<span class="c1">#Computed fieds </span>
+<span class="n">calc_spd</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df1</span><span class="p">,</span> <span class="n">nsmooth</span> <span class="o">=</span><span class="m">50</span> <span class="p">)</span> <span class="p">{</span>
+
+  <span class="n">df2</span> <span class="o">&lt;-</span> <span class="n">df1</span>
+  
+  <span class="c1"># Time step</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">dt</span> <span class="o">&lt;-</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">difftime</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">t</span><span class="p">,</span> <span class="nf">lag_vec</span><span class="p">(</span> <span class="n">df2</span><span class="o">$</span><span class="n">t</span><span class="p">))</span> <span class="p">)</span>
+
+  <span class="c1">#Previous points</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">lat1</span> <span class="o">&lt;-</span> <span class="nf">lag_vec</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">lat</span><span class="p">)</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">lon1</span> <span class="o">&lt;-</span> <span class="nf">lag_vec</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">lon</span><span class="p">)</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">alt1</span> <span class="o">&lt;-</span> <span class="nf">lag_vec</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">alt</span><span class="p">)</span>
+  
+  <span class="c1"># Calculate distances (in metres) using function from the raster package.</span>
+  
+  <span class="c1">#some woodoo with as.numeric is required  </span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">ds</span> <span class="o">&lt;-</span> <span class="nf">apply</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">FUN</span> <span class="o">=</span> <span class="nf">function </span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">distVincentyEllipsoid</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">row[[</span><span class="s">&#34;lon1&#34;</span><span class="n">]]</span><span class="p">),</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">row[[</span><span class="s">&#34;lat1&#34;</span><span class="n">]]</span><span class="p">)),</span>
+                          <span class="nf">c</span><span class="p">(</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">row[[</span><span class="s">&#34;lon&#34;</span><span class="n">]]</span><span class="p">),</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">row[[</span><span class="s">&#34;lat&#34;</span><span class="n">]]</span><span class="p">)))</span>
+  <span class="p">})</span> 
+
+<span class="c1"># same </span>
+  <span class="c1"># df2$ds_geo &lt;- apply(df2, 1, FUN = function (row) {</span>
+  <span class="c1">#   distGeo(c(as.numeric(row[[&#34;lon1&#34;]]), as.numeric(row[[&#34;lat1&#34;]])),</span>
+  <span class="c1">#                         c(as.numeric(row[[&#34;lon&#34;]]), as.numeric(row[[&#34;lat&#34;]])))</span>
+  <span class="c1"># }) </span>
+
+<span class="c1">#correct distances on elevations</span>
+  
+  <span class="n">df2</span><span class="o">$</span><span class="n">ds_alt</span> <span class="o">&lt;-</span> <span class="nf">sqrt</span><span class="p">(</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds</span><span class="o">*</span><span class="n">df2</span><span class="o">$</span><span class="n">ds</span> <span class="o">+</span> <span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">alt</span><span class="o">-</span><span class="n">df2</span><span class="o">$</span><span class="n">alt1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">alt</span><span class="o">-</span><span class="n">df2</span><span class="o">$</span><span class="n">alt1</span><span class="p">))</span>
+  
+  <span class="n">df2</span><span class="o">$</span><span class="n">ds</span>  <span class="o">&lt;-</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">ds</span> <span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds</span><span class="p">)</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">ds_alt</span>  <span class="o">&lt;-</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">ds_alt</span> <span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds_alt</span><span class="p">)</span>
+  
+  <span class="c1"># Calculate speed kilometres per hour and two LOWESS smoothers to get rid of some noise.</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh</span>  <span class="o">&lt;-</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds</span> <span class="o">/</span> <span class="n">df2</span><span class="o">$</span><span class="n">dt</span>  <span class="o">*</span> <span class="m">3.6</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh</span>  <span class="o">&lt;-</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh</span> <span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh</span><span class="p">)</span>
+  
+  <span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh_alt</span>  <span class="o">&lt;-</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds_alt</span> <span class="o">/</span> <span class="n">df2</span><span class="o">$</span><span class="n">dt</span>  <span class="o">*</span> <span class="m">3.6</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh_alt</span>  <span class="o">&lt;-</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh_alt</span> <span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">speed_kmh_alt</span><span class="p">)</span>
+  
+  <span class="c1">#Smoothed speed</span>
+  <span class="c1">#Unfortunately lowees sometimes go crazy with GPS data</span>
+  <span class="c1">#df2$speed_lowess &lt;- lowess(df2$speed_kmh, f = 100/nsmooth)$y</span>
+  <span class="c1">#df2$speed_lowess_alt &lt;- lowess(df2$speed_kmh_alt, f = 100/nsmooth)$y</span>
+
+  <span class="c1">#Distance along the track</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">distance</span> <span class="o">&lt;-</span> <span class="nf">cumsum</span><span class="p">(</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds</span><span class="p">)</span><span class="o">/</span><span class="m">1000</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">distance_alt</span> <span class="o">&lt;-</span> <span class="nf">cumsum</span><span class="p">(</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds_alt</span><span class="p">)</span><span class="o">/</span><span class="m">1000</span>
+  
+  <span class="n">df2</span><span class="o">$</span><span class="n">cumtime</span> <span class="o">&lt;-</span> <span class="nf">cumsum</span><span class="p">(</span> <span class="n">df2</span><span class="o">$</span><span class="n">dt</span> <span class="p">)</span><span class="o">/</span><span class="m">3600</span> <span class="c1">#hours</span>
+  
+  <span class="n">df2</span><span class="o">$</span><span class="n">speed_lowess</span> <span class="o">&lt;-</span> <span class="nf">av_speed</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">distance</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">cumtime</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">)</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">speed_lowess_alt</span> <span class="o">&lt;-</span> <span class="nf">av_speed</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">distance_alt</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">cumtime</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">)</span>
+                                   
+  <span class="n">df2</span><span class="o">$</span><span class="n">alt_lowess</span> <span class="o">&lt;-</span> <span class="nf">lowess</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">alt</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="m">0.02</span><span class="p">)</span><span class="o">$</span><span class="n">y</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">hr_lowess</span> <span class="o">&lt;-</span> <span class="nf">lowess</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">hr</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="m">0.02</span><span class="p">)</span><span class="o">$</span><span class="n">y</span>
+
+  <span class="n">df2</span><span class="o">$</span><span class="n">dds0_m</span>  <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="nf">diff</span><span class="p">(</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds0_m</span> <span class="p">))</span>
+  
+  <span class="n">df2</span><span class="o">$</span><span class="n">ds0_km</span>  <span class="o">&lt;-</span> <span class="n">df2</span><span class="o">$</span><span class="n">ds0_m</span> <span class="o">/</span> <span class="m">1000</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">v0_kmh</span>  <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="nf">diff</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">ds0_m</span><span class="p">)</span> <span class="p">)</span> <span class="o">/</span> <span class="n">df2</span><span class="o">$</span><span class="n">dt</span>  <span class="o">*</span> <span class="m">3.6</span>
+  <span class="n">df2</span><span class="o">$</span><span class="n">v0_lowess</span>  <span class="o">&lt;-</span>   <span class="nf">av_speed</span><span class="p">(</span><span class="n">df2</span><span class="o">$</span><span class="n">ds0_km</span><span class="p">,</span> <span class="n">df2</span><span class="o">$</span><span class="n">cumtime</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">)</span> <span class="c1">#km, h =&gt; km/h </span>
+
+    
+  <span class="nf">return</span><span class="p">(</span> <span class="n">df2</span> <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">nopt</span> <span class="o">&lt;-</span> <span class="nf">opt_nsmooth</span><span class="p">(</span><span class="n">df_tcx1</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;Optimal smoothing window: &#34;</span><span class="p">,</span> <span class="n">nopt</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;Optimal smoothing window: 26&#34;
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df_tcx1e</span> <span class="o">&lt;-</span> <span class="nf">calc_spd</span><span class="p">(</span><span class="n">df_tcx1</span><span class="p">,</span> <span class="n">nopt</span><span class="p">)</span>
+</code></pre></div><p>4. The good question is whether to take altitude into account in analysis of speed and distance. Internet service like Endomondo and Strava state that for estimation of speed and distance they assume the Earth to be flat.</p>
+<p>For example Strava stresses: &ldquo;Since this is a GPS-calculated distance, a flat surface is assumed, and vertical speed from topography is not accounted for.
+Cons: A flat surface is assumed, and vertical speed from topography is not accounted for. Similar to the above, straight lines connect the GPS points.&rdquo;</p>
+<p>Another consideration: different methods of distance estimation - Endomondo, Strava, computations on ellipsoid - yield noticeably (12%) different result. More so the same track created by Endomondo produces different distance estimates depending on its format (GPX or TCX) when loaded to Strava. For the same track the Strava distance estimates are 14.8 km for GPX format and 16,6 km for TCX format. (It looks like GPX goes not contain some data that is present in TCX).</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">n</span><span class="o">&lt;-</span> <span class="nf">dim</span><span class="p">(</span><span class="n">df_tcx1e</span><span class="p">)</span><span class="n">[2]</span>
+<span class="nf">print</span><span class="p">(</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;Endomondo dist./calculated dist.:&#34;</span><span class="p">,</span> 
+              <span class="nf">sprintf</span><span class="p">(</span><span class="s">&#34;%.2f&#34;</span><span class="p">,</span> <span class="n">df_tcx1e[n</span><span class="p">,</span> <span class="s">&#34;ds0_m&#34;</span><span class="n">]</span><span class="o">/</span><span class="n">df_tcx1e[n</span><span class="p">,</span><span class="s">&#34;distance&#34;</span><span class="n">]</span><span class="o">/</span><span class="m">1000</span><span class="p">)))</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;Endomondo dist./calculated dist.:1.12&#34;
+</code></pre></div><p>This discrepancy is systematic. Possibly Endomondo app uses some additional sensors to calculate the distance and this is especially noticeable for XC trails. If we plot lengths of GPS segments calculated via the geo ellipsoid method vs lengths estimated by Endomondo in TCX file will see two groups of segments: for the first group the lengths are same, for the second group Endomondo overestimates distances relative to the ellipsoid method.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">df_tcx1e</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dds0_m</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ds</span><span class="p">))</span><span class="o">+</span><span class="nf">geom_point</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Geoellipsoid dist., m&#34;</span><span class="p">)</span><span class="o">+</span><span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Reported by Endomondo,m&#34;</span><span class="p">)</span><span class="o">+</span><span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Endomondo vs. geoellipse calculated distances&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>These points are randomly distributed over time so relationship between the cumulative distances (and speeds) is linear.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">df_tcx1e</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ds0_m</span><span class="o">/</span><span class="m">1000</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">distance_alt</span><span class="p">))</span><span class="o">+</span>
+  <span class="nf">geom_point</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Distance, measured by Endomondo vs. Calculated&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Measured by Endomondo, km&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Calculated, km&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Below I will use speeds and distances computed by myself with an altitude taken into account (but the difference with the flat Earth is small).</p>
+<h2 id="dynamics">Dynamics</h2>
+<p>5. Let start with the plot of elevation evolution over time. On average it is measured quite good, we see both long lift and descents. There are a lot of fast changes also that are caused by both GPS noise and ravine dives on XC trains.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Plot elevations and smoother</span>
+
+<span class="n">plot_elevations</span> <span class="o">&lt;-</span> <span class="nf">function </span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">cumtime</span><span class="o">*</span><span class="m">60</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">alt</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;l&#34;</span><span class="p">,</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span>  <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;Elevation&#34;</span><span class="p">,</span> <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Time, min&#34;</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;grey40&#34;</span><span class="p">)</span>
+  <span class="nf">lines</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">cumtime</span><span class="o">*</span><span class="m">60</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">alt_lowess</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">,</span> <span class="n">lwd</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+  <span class="nf">legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">&#34;bottomright&#34;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;GPS elevation&#34;</span><span class="p">,</span> <span class="s">&#34;LOWESS elevation&#34;</span><span class="p">),</span>
+         <span class="n">col</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="s">&#34;red&#34;</span><span class="p">),</span> <span class="n">lwd</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">)</span>
+ <span class="nf">title</span><span class="p">(</span><span class="s">&#34;Elevation vs. time&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">plot_elevations</span><span class="p">(</span><span class="n">df_tcx1e</span><span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>6. Next comes the speed plot. It is possible to plot speed against time or distance. As can be seen I spent a huge part of my training at rest, so the average speed is much smaller than the speed on segments.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_speeds_vs_time</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">n</span> <span class="o">&lt;-</span> <span class="nf">dim</span><span class="p">(</span><span class="n">df_in</span><span class="p">)</span><span class="n">[2]</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">cumtime</span><span class="o">*</span><span class="m">60</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">speed_kmh_alt</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;l&#34;</span><span class="p">,</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span>  <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;Speed (km/h)&#34;</span><span class="p">,</span> <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Time, min&#34;</span><span class="p">,</span>     <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s">&#34;Speed vs. Time &#34;</span><span class="p">)</span>
+  <span class="nf">lines</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">cumtime</span><span class="o">*</span><span class="m">60</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">speed_lowess_alt</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">lwd</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+  <span class="nf">legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">&#34;topright&#34;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;GPS speed&#34;</span><span class="p">,</span> <span class="s">&#34;Smoothed speed&#34;</span><span class="p">),</span>
+         <span class="n">col</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="s">&#34;blue&#34;</span><span class="p">),</span> <span class="n">lwd</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="n">df_in[n</span><span class="p">,</span> <span class="s">&#34;distance&#34;</span><span class="n">]</span><span class="o">/</span><span class="n">df_in[n</span><span class="p">,</span><span class="s">&#34;cumtime&#34;</span><span class="n">]</span><span class="p">,</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="n">df_in[n</span><span class="p">,</span> <span class="s">&#34;distance_alt&#34;</span><span class="n">]</span><span class="o">/</span><span class="n">df_in[n</span><span class="p">,</span><span class="s">&#34;cumtime&#34;</span><span class="n">]</span><span class="p">,</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;yellow&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_speeds_vs_time</span><span class="p">(</span> <span class="n">df_tcx1e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Plot speeds and smoother</span>
+<span class="n">plot_speeds_vs_dist</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">n</span> <span class="o">&lt;-</span> <span class="nf">dim</span><span class="p">(</span><span class="n">df_in</span><span class="p">)</span><span class="n">[2]</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">distance</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">speed_kmh_alt</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;l&#34;</span><span class="p">,</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span>  <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;Speed (km/h)&#34;</span><span class="p">,</span> <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Distance, km&#34;</span><span class="p">,</span>     <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s">&#34;Speed vs. Distance &#34;</span><span class="p">)</span>
+  <span class="nf">lines</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">distance</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">speed_lowess_alt</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">lwd</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+  <span class="nf">legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">&#34;topright&#34;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;GPS speed&#34;</span><span class="p">,</span> <span class="s">&#34;Smoothed speed&#34;</span><span class="p">),</span>
+         <span class="n">col</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="s">&#34;blue&#34;</span><span class="p">),</span> <span class="n">lwd</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="n">df_in[n</span><span class="p">,</span> <span class="s">&#34;distance&#34;</span><span class="n">]</span><span class="o">/</span><span class="n">df_in[n</span><span class="p">,</span><span class="s">&#34;cumtime&#34;</span><span class="n">]</span><span class="p">,</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="n">df_in[n</span><span class="p">,</span> <span class="s">&#34;distance_alt&#34;</span><span class="n">]</span><span class="o">/</span><span class="n">df_in[n</span><span class="p">,</span><span class="s">&#34;cumtime&#34;</span><span class="n">]</span><span class="p">,</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;yellow&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_speeds_vs_dist</span><span class="p">(</span> <span class="n">df_tcx1e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>We can also produce histogram of speeds distribution. It is clear that most of the time I spent on technical trails where speed was not very high.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Speed histogram</span>
+<span class="n">hist_speeds</span> <span class="o">&lt;-</span> <span class="nf">function </span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nf">hist</span><span class="p">(</span> <span class="n">df_in</span><span class="o">$</span><span class="n">speed_kmh</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="m">50</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&#34;Speed, km/h&#34;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s">&#34;Distribution of speeds&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">hist_speeds</span><span class="p">(</span> <span class="n">df_tcx1e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<h2 id="pulse">Pulse</h2>
+<p>7. It is interesting to analyze heart rate during my exercises. I do not always use HR monitor so I will load another track. The method of graphs production is the same.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df_tcx2</span> <span class="o">&lt;-</span>  <span class="nf">load_tcx</span><span class="p">(</span> <span class="nf">paste0</span><span class="p">(</span> <span class="n">data_folder</span><span class="p">,</span> <span class="s">&#34;20190529_115118.tcx&#34;</span> <span class="p">))</span>
+<span class="n">nopt2</span> <span class="o">&lt;-</span> <span class="nf">opt_nsmooth</span><span class="p">(</span><span class="n">df_tcx2</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#34;Optimal smoothing window: &#34;</span><span class="p">,</span> <span class="n">nopt2</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;Optimal smoothing window: 48&#34;
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df_tcx2e</span> <span class="o">&lt;-</span> <span class="nf">calc_spd</span><span class="p">(</span><span class="n">df_tcx2</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_hr_vs_time</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">cumtime</span><span class="o">*</span><span class="m">60</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">hr</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;l&#34;</span><span class="p">,</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span>  <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;HR (bpm)&#34;</span><span class="p">,</span> <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Time, min&#34;</span><span class="p">,</span>  
+       <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s">&#34;HR vs. Time &#34;</span><span class="p">)</span>
+  <span class="nf">lines</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">cumtime</span><span class="o">*</span><span class="m">60</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">hr_lowess</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">lwd</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+  <span class="nf">legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">&#34;topright&#34;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;HR&#34;</span><span class="p">,</span> <span class="s">&#34;Averaged HR&#34;</span><span class="p">),</span>
+         <span class="n">col</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="s">&#34;blue&#34;</span><span class="p">),</span> <span class="n">lwd</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">hr</span><span class="p">),</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">hr_lowess</span><span class="p">),</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;yellow&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_hr_vs_time</span><span class="p">(</span> <span class="n">df_tcx2e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_hr_vs_dist</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">distance</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">hr</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&#34;l&#34;</span><span class="p">,</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span>  <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;HR (bpm)&#34;</span><span class="p">,</span> <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Distance, km&#34;</span><span class="p">,</span>  
+       <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s">&#34;HR vs. Distance &#34;</span><span class="p">)</span>
+  <span class="nf">lines</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">distance</span><span class="p">,</span> <span class="n">df_in</span><span class="o">$</span><span class="n">hr_lowess</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">lwd</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+  <span class="nf">legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">&#34;topright&#34;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;HR&#34;</span><span class="p">,</span> <span class="s">&#34;Averaged HR&#34;</span><span class="p">),</span>
+         <span class="n">col</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;grey40&#34;</span><span class="p">,</span> <span class="s">&#34;blue&#34;</span><span class="p">),</span> <span class="n">lwd</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">hr</span><span class="p">),</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">)</span>
+  <span class="nf">abline</span><span class="p">(</span><span class="n">h</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">hr_lowess</span><span class="p">),</span> <span class="n">lty</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&#34;yellow&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_hr_vs_dist</span><span class="p">(</span> <span class="n">df_tcx2e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#maximum heart rate for my age</span>
+<span class="n">age</span> <span class="o">&lt;-</span> <span class="m">45</span>
+<span class="n">hrmax</span> <span class="o">&lt;-</span> <span class="m">220</span> <span class="o">-</span> <span class="n">age</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">calc_hr_zone</span>  <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">hr</span><span class="p">,</span> <span class="n">hrmax</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">return</span><span class="p">(</span> <span class="nf">as.integer</span><span class="p">(</span> <span class="nf">floor</span><span class="p">(</span> <span class="p">(</span> <span class="n">hr</span><span class="o">/</span><span class="n">hrmax</span> <span class="o">-</span> <span class="m">0.5</span> <span class="p">)</span> <span class="o">*</span> <span class="m">10</span> <span class="p">)</span> <span class="o">+</span> <span class="m">1</span> <span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_hr_stat</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span><span class="p">,</span> <span class="n">hrmax</span> <span class="o">=</span> <span class="m">175</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">x1</span> <span class="o">&lt;-</span>  <span class="n">df_in[</span>  <span class="p">,</span> <span class="n">.(dtsum</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">dt</span><span class="p">)),</span> <span class="n">by</span> <span class="o">=</span><span class="n">.(hr</span><span class="p">)</span><span class="n">]</span>
+  <span class="nf">setkey</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">hr</span><span class="p">)</span>
+  
+  <span class="n">gg1</span><span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">hr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dtsum</span><span class="o">/</span><span class="m">60</span><span class="p">))</span><span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">)</span><span class="o">+</span>
+    <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Time spent at given HR&#34;</span><span class="p">)</span><span class="o">+</span>
+    <span class="nf">geom_smooth</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Heart rate, bmp&#34;</span><span class="p">)</span><span class="o">+</span> 
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Time spent, min&#34;</span><span class="p">)</span> 
+  
+  <span class="n">gg_add_zones</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">gg1</span><span class="p">,</span> <span class="n">hrmax</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="nf">for</span><span class="p">(</span> <span class="n">i</span> <span class="n">in</span> <span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">6</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">h</span> <span class="o">&lt;-</span> <span class="n">hrmax</span> <span class="o">*</span> <span class="p">(</span><span class="m">0.4</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span> <span class="m">0.1</span><span class="p">)</span>
+      <span class="n">gg1</span> <span class="o">&lt;-</span> <span class="n">gg1</span> <span class="o">+</span> <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span>  <span class="n">h</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span> <span class="s">&#34;dotted&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="n">i</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">5</span><span class="p">)</span>
+    <span class="n">df_labels</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span> <span class="n">hr</span> <span class="o">=</span> <span class="n">hrmax</span> <span class="o">*</span> <span class="p">(</span><span class="m">0.45</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span> <span class="m">0.1</span><span class="p">),</span> <span class="n">hr_zone</span> <span class="o">=</span> <span class="n">i</span> <span class="p">)</span>
+    
+    <span class="n">gg1</span> <span class="o">&lt;-</span> <span class="n">gg1</span> <span class="o">+</span> <span class="nf">geom_text</span><span class="p">(</span> <span class="n">data</span><span class="o">=</span><span class="n">df_labels</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span> <span class="n">x</span><span class="o">=</span><span class="n">hr</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span> <span class="s">&#34;Zone &#34;</span><span class="p">,</span> <span class="n">hr_zone</span><span class="p">),</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span> <span class="p">))</span>
+  <span class="p">}</span>
+  <span class="n">gg1</span> <span class="o">&lt;-</span> <span class="nf">gg_add_zones</span><span class="p">(</span> <span class="n">gg1</span><span class="p">,</span> <span class="n">hrmax</span> <span class="p">)</span>
+  
+  <span class="nf">print</span><span class="p">(</span><span class="n">gg1</span><span class="p">)</span>
+
+  <span class="n">gg2</span><span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">hr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">dtsum</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">dtsum</span><span class="p">)))</span><span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">)</span><span class="o">+</span>
+    <span class="nf">geom_smooth</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Share of time spent at given HR&#34;</span><span class="p">)</span><span class="o">+</span>
+    <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Heart rate, bmp&#34;</span><span class="p">)</span><span class="o">+</span> 
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Share of time&#34;</span><span class="p">)</span>
+
+  <span class="n">gg2</span> <span class="o">&lt;-</span> <span class="nf">gg_add_zones</span><span class="p">(</span> <span class="n">gg2</span><span class="p">,</span> <span class="n">hrmax</span> <span class="p">)</span>
+  <span class="nf">print</span><span class="p">(</span><span class="n">gg2</span><span class="p">)</span>
+  
+  <span class="n">gg3</span> <span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">hr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="nf">cumsum</span><span class="p">(</span><span class="n">dtsum</span><span class="p">)</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">dtsum</span><span class="p">)))</span><span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Share of time spent at HR&lt;x&#34;</span><span class="p">)</span><span class="o">+</span>
+    <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Heart rate, bmp&#34;</span><span class="p">)</span><span class="o">+</span> <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Share of time&#34;</span><span class="p">)</span>
+  <span class="n">gg3</span> <span class="o">&lt;-</span> <span class="nf">gg_add_zones</span><span class="p">(</span> <span class="n">gg3</span><span class="p">,</span> <span class="n">hrmax</span> <span class="p">)</span>
+  
+  <span class="nf">print</span><span class="p">(</span><span class="n">gg3</span><span class="p">)</span>
+  
+  <span class="n">gg4</span> <span class="o">&lt;-</span> <span class="nf">ggplot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">hr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="nf">cumsum</span><span class="p">(</span><span class="n">dtsum</span><span class="p">)</span><span class="o">/</span><span class="m">60</span><span class="p">))</span><span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Time spent at HR&lt;x&#34;</span><span class="p">)</span><span class="o">+</span>
+    <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Heart rate, bmp&#34;</span><span class="p">)</span><span class="o">+</span> <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Time,min&#34;</span><span class="p">)</span>
+  <span class="n">gg4</span> <span class="o">&lt;-</span> <span class="nf">gg_add_zones</span><span class="p">(</span> <span class="n">gg4</span><span class="p">,</span> <span class="n">hrmax</span> <span class="p">)</span>
+  
+  <span class="nf">print</span><span class="p">(</span><span class="n">gg4</span><span class="p">)</span>
+
+  <span class="p">}</span>
+
+<span class="nf">plot_hr_stat</span><span class="p">(</span><span class="n">df_tcx2e</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-21-2.png" width="672" /><img src="gps_velo_en_files/figure-html/unnamed-chunk-21-3.png" width="672" /><img src="gps_velo_en_files/figure-html/unnamed-chunk-21-4.png" width="672" /></p>
+<p>Well, my pulse is high. And the more technical the segment is the higher is the pulse.</p>
+<h2 id="vizualization-on-google-maps">Vizualization on Google maps</h2>
+<p>8. At first we produce the track without any map but with the color of each point to indicate the current speed. The bluer the slower, the redder the higher is the speed.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Plot the track without any map, the shape of the track is already visible.</span>
+<span class="n">plot_track</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span><span class="p">,</span> <span class="n">maxspeed</span> <span class="o">=</span> <span class="m">50</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">x1</span> <span class="o">&lt;-</span> <span class="n">df_in</span><span class="o">$</span><span class="n">speed_lowess</span> <span class="o">/</span> <span class="n">maxspeed</span>
+  <span class="n">c1</span> <span class="o">&lt;-</span> <span class="nf">rgb</span><span class="p">(</span> <span class="n">x1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="o">-</span><span class="n">x1</span> <span class="p">)</span>
+  
+  <span class="nf">plot</span><span class="p">(</span><span class="nf">rev</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">),</span> <span class="nf">rev</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">),</span>  <span class="n">col</span> <span class="o">=</span> <span class="n">c1</span><span class="p">,</span> <span class="n">lwd</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="n">bty</span> <span class="o">=</span> <span class="s">&#34;n&#34;</span><span class="p">,</span> 
+       <span class="n">ylab</span> <span class="o">=</span> <span class="s">&#34;Latitude&#34;</span><span class="p">,</span> <span class="n">xlab</span> <span class="o">=</span> <span class="s">&#34;Longitude&#34;</span><span class="p">,</span> <span class="n">pch</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_track</span><span class="p">(</span> <span class="n">df_tcx1e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>9. Then we will load and plot the data from the Google Maps. To do so we initially compute the box of geo limits of my movements and supply it as the parameter to the function <code>get_map</code> that requests Google services and then call the function <code>ggmap</code> that plots the result. The maximum magnification in the call to <code>ggmap</code> corresponds to zoom=18. The color of points will correspond to the speed averaged over 90 second.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_track_on_gmaps</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span>  <span class="p">)</span> <span class="p">{</span>  
+  
+  <span class="c1">###Draw track with google maps</span>
+  
+  <span class="c1"># mapImageData1 &lt;- get_map(location = c(lon = mean(df1$lon), lat = mean(df1$lon)),</span>
+  <span class="c1">#                          color = &#34;color&#34;,</span>
+  <span class="c1">#                          source = &#34;google&#34;,</span>
+  <span class="c1">#                          maptype = &#34;satellite&#34;,</span>
+  <span class="c1">#                          zoom = 11)</span>
+  
+  
+  <span class="n">sscale</span> <span class="o">=</span> <span class="m">1</span>
+  <span class="n">pad1</span> <span class="o">&lt;-</span> <span class="m">2e-4</span>
+  
+  <span class="n">box1</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span> <span class="n">left</span><span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">-</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">bottom</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span><span class="o">-</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">right</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span>  <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">top</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span>  <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="n">pad1</span><span class="p">)</span>
+  
+  
+  <span class="n">mapImageData1</span> <span class="o">&lt;-</span> <span class="nf">get_map</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="n">box1</span><span class="p">,</span>
+                           <span class="n">color</span> <span class="o">=</span> <span class="s">&#34;color&#34;</span><span class="p">,</span>
+                           <span class="n">source</span> <span class="o">=</span> <span class="s">&#34;google&#34;</span><span class="p">,</span>
+                           <span class="n">maptype</span> <span class="o">=</span> <span class="s">&#34;satellite&#34;</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="m">12</span> <span class="p">)</span>
+  
+  
+  <span class="n">plot1</span> <span class="o">&lt;-</span> <span class="nf">ggmap</span><span class="p">(</span><span class="n">mapImageData1</span><span class="p">,</span>   <span class="n">extent</span> <span class="o">=</span> <span class="s">&#34;panel&#34;</span><span class="p">,</span> <span class="c1">#&#34;device&#34;</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="s">&#34;right&#34;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="m">0.1</span><span class="p">,</span> <span class="n">maprange</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s">&#34;Latitude&#34;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s">&#34;Longitude&#34;</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">lon</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">speed_lowess</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df_in</span><span class="p">,</span>
+               <span class="n">size</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span>  <span class="n">show.legend</span> <span class="o">=</span> <span class="bp">T</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span> <span class="o">=</span> <span class="s">&#34;right&#34;</span><span class="p">)</span>  <span class="o">+</span> 
+    <span class="nf">scale_color_gradient</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">)</span> 
+  <span class="nf">print</span><span class="p">(</span> <span class="n">plot1</span> <span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_track_on_gmaps</span><span class="p">(</span> <span class="n">df_tcx1e</span> <span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>10. Because I am not very good at following predetermined path I am curious to compare the planned path with the fact.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df_plan</span> <span class="o">&lt;-</span> <span class="nf">load_gpx</span><span class="p">(</span> <span class="nf">paste0</span><span class="p">(</span> <span class="n">data_folder</span><span class="p">,</span> <span class="s">&#34;138pop_2019_by_rockfox.gpx&#34;</span> <span class="p">))</span>
+
+<span class="n">plot_fact_vs_plan_on_gmaps</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span><span class="p">,</span> <span class="n">df_plan</span> <span class="p">)</span> <span class="p">{</span>  
+
+<span class="c1">###Draw track with google maps</span>
+
+<span class="c1"># mapImageData1 &lt;- get_map(location = c(lon = mean(df1$lon), lat = mean(df1$lon)),</span>
+<span class="c1">#                          color = &#34;color&#34;,</span>
+<span class="c1">#                          source = &#34;google&#34;,</span>
+<span class="c1">#                          maptype = &#34;satellite&#34;,</span>
+<span class="c1">#                          zoom = 11)</span>
+
+
+  <span class="n">sscale</span> <span class="o">=</span> <span class="m">1</span>
+  <span class="n">pad1</span> <span class="o">&lt;-</span> <span class="m">2e-4</span>
+  
+  <span class="n">box1</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span> <span class="n">left</span><span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">df_plan</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">-</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">bottom</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span> <span class="n">df_plan</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span><span class="o">-</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">right</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">df_plan</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">top</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span>  <span class="n">df_plan</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="n">pad1</span><span class="p">)</span>
+  
+  
+  <span class="n">mapImageData1</span> <span class="o">&lt;-</span> <span class="nf">get_map</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="n">box1</span><span class="p">,</span>
+                           <span class="n">color</span> <span class="o">=</span> <span class="s">&#34;color&#34;</span><span class="p">,</span>
+                           <span class="n">source</span> <span class="o">=</span> <span class="s">&#34;google&#34;</span><span class="p">,</span>
+                           <span class="n">maptype</span> <span class="o">=</span> <span class="s">&#34;satellite&#34;</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="m">12</span> <span class="p">)</span>
+  
+  
+  <span class="n">plot1</span> <span class="o">&lt;-</span> <span class="nf">ggmap</span><span class="p">(</span><span class="n">mapImageData1</span><span class="p">,</span>   <span class="n">extent</span> <span class="o">=</span> <span class="s">&#34;panel&#34;</span><span class="p">,</span> <span class="c1">#&#34;device&#34;</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="s">&#34;right&#34;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="m">0.1</span><span class="p">,</span> <span class="n">maprange</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s">&#34;Latitude&#34;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s">&#34;Longitude&#34;</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">lon</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">speed_lowess</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df_in</span><span class="p">,</span>
+               <span class="n">size</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">pch</span> <span class="o">=</span> <span class="m">20</span><span class="p">,</span>  <span class="n">show.legend</span> <span class="o">=</span> <span class="bp">T</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">lon</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lat</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df_plan</span><span class="p">,</span>
+               <span class="n">size</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">pch</span> <span class="o">=</span> <span class="m">20</span><span class="p">,</span>  <span class="n">show.legend</span> <span class="o">=</span> <span class="bp">T</span><span class="p">,</span> <span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;yellow&#34;</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span> <span class="o">=</span> <span class="s">&#34;right&#34;</span><span class="p">)</span>  <span class="o">+</span> 
+    <span class="nf">scale_color_gradient</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">)</span> 
+  <span class="nf">print</span><span class="p">(</span> <span class="n">plot1</span> <span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_fact_vs_plan_on_gmaps</span><span class="p">(</span><span class="n">df_tcx1e</span><span class="p">,</span> <span class="n">df_plan</span><span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>The difference is quite noticeable. I planned to ride on the easy green trails but happened to storm more difficult red ones.</p>
+<p>The same way we plot plot the heart rate.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_hr_on_ggmap</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">sscale</span> <span class="o">=</span> <span class="m">1</span>
+  <span class="n">pad1</span> <span class="o">&lt;-</span> <span class="m">2e-4</span>
+  
+  <span class="n">box1</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span> <span class="n">left</span><span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">-</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">bottom</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span><span class="o">-</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">right</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span><span class="n">pad1</span><span class="p">,</span>
+             <span class="n">top</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span>  <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="n">pad1</span><span class="p">)</span>
+  
+  
+  <span class="n">mapImageData1</span> <span class="o">&lt;-</span> <span class="nf">get_map</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="n">box1</span><span class="p">,</span>
+                           <span class="n">color</span> <span class="o">=</span> <span class="s">&#34;color&#34;</span><span class="p">,</span>
+                           <span class="n">source</span> <span class="o">=</span> <span class="s">&#34;google&#34;</span><span class="p">,</span>
+                           <span class="n">maptype</span> <span class="o">=</span> <span class="s">&#34;satellite&#34;</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="m">12</span> <span class="p">)</span>
+  
+  
+    <span class="nf">ggmap</span><span class="p">(</span><span class="n">mapImageData1</span><span class="p">,</span>   <span class="n">extent</span> <span class="o">=</span> <span class="s">&#34;panel&#34;</span><span class="p">,</span> <span class="c1">#&#34;device&#34;</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="s">&#34;right&#34;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="m">0.1</span><span class="p">,</span> <span class="n">maprange</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s">&#34;Latitude&#34;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s">&#34;Longitude&#34;</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">lon</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">hr_lowess</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df_in</span><span class="p">,</span>
+               <span class="n">size</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">show.legend</span> <span class="o">=</span> <span class="bp">T</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span> <span class="o">=</span> <span class="s">&#34;right&#34;</span><span class="p">)</span>  <span class="o">+</span> 
+    <span class="nf">scale_color_gradient</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Pulse rate along the track&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_hr_on_ggmap</span><span class="p">(</span><span class="n">df_tcx2e</span><span class="p">)</span>
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>11. It is also possible to plot the HR zones right on the map. The harder the trail the higher the pulse.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">df_tcx2e[</span><span class="p">,</span> <span class="n">hr_zone</span> <span class="o">:=</span> <span class="nf">calc_hr_zone</span><span class="p">(</span><span class="n">hr</span><span class="p">,</span> <span class="n">hrmax</span><span class="p">)</span><span class="n">]</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">plot_hrzone_on_ggmap</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">df_in</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">sscale</span> <span class="o">=</span> <span class="m">1</span>
+  <span class="n">pad1</span> <span class="o">&lt;-</span> <span class="m">2e-4</span>
+  
+  <span class="n">box1</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span> <span class="n">left</span><span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">),</span>
+             <span class="n">bottom</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">),</span>
+             <span class="n">right</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span> <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">),</span>
+             <span class="n">top</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">df_in</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span>  <span class="n">na.rm</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+  
+  <span class="n">dx</span> <span class="o">&lt;-</span> <span class="nf">abs</span><span class="p">(</span> <span class="p">(</span><span class="n">box1</span><span class="o">$</span><span class="n">right</span> <span class="o">-</span> <span class="n">box1</span><span class="o">$</span><span class="n">left</span><span class="p">)</span><span class="o">/</span><span class="m">10</span><span class="p">)</span>
+  <span class="n">dy</span> <span class="o">&lt;-</span> <span class="nf">abs</span><span class="p">(</span> <span class="p">(</span><span class="n">box1</span><span class="o">$</span><span class="n">top</span> <span class="o">-</span> <span class="n">box1</span><span class="o">$</span><span class="n">bottom</span><span class="p">)</span><span class="o">/</span><span class="m">10</span><span class="p">)</span>
+  
+  <span class="n">box1</span><span class="o">$</span><span class="n">left</span> <span class="o">&lt;-</span> <span class="n">box1</span><span class="o">$</span><span class="n">left</span> <span class="o">-</span> <span class="n">dx</span>
+  <span class="n">box1</span><span class="o">$</span><span class="n">right</span> <span class="o">&lt;-</span> <span class="n">box1</span><span class="o">$</span><span class="n">right</span> <span class="o">+</span> <span class="n">dx</span>
+  
+  <span class="n">box1</span><span class="o">$</span><span class="n">top</span> <span class="o">&lt;-</span> <span class="n">box1</span><span class="o">$</span><span class="n">top</span> <span class="o">+</span> <span class="n">dy</span>
+  <span class="n">box1</span><span class="o">$</span><span class="n">bottom</span> <span class="o">&lt;-</span> <span class="n">box1</span><span class="o">$</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">dx</span>
+  
+  <span class="n">mapImageData1</span> <span class="o">&lt;-</span> <span class="nf">get_map</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="nf">unlist</span><span class="p">(</span><span class="n">box1</span><span class="p">),</span>
+                           <span class="n">color</span> <span class="o">=</span> <span class="s">&#34;color&#34;</span><span class="p">,</span>
+                           <span class="n">source</span> <span class="o">=</span> <span class="s">&#34;google&#34;</span><span class="p">,</span>
+                           <span class="n">maptype</span> <span class="o">=</span> <span class="s">&#34;satellite&#34;</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="m">12</span> <span class="p">)</span>
+  
+  
+  <span class="nf">ggmap</span><span class="p">(</span><span class="n">mapImageData1</span><span class="p">,</span>   <span class="n">extent</span> <span class="o">=</span> <span class="s">&#34;panel&#34;</span><span class="p">,</span> <span class="c1">#&#34;device&#34;</span>
+        <span class="n">legend</span><span class="o">=</span><span class="s">&#34;right&#34;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="m">0.1</span><span class="p">,</span> <span class="n">maprange</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s">&#34;Latitude&#34;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s">&#34;Longitude&#34;</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">geom_point</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">lon</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lat</span><span class="p">,</span> 
+                   <span class="n">color</span><span class="o">=</span><span class="nf">as.factor</span><span class="p">(</span><span class="n">hr_zone</span><span class="p">)),</span> <span class="n">data</span> <span class="o">=</span> <span class="nf">na.omit</span><span class="p">(</span><span class="n">df_in[</span><span class="p">,</span><span class="n">.(lon</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">hr_zone</span><span class="p">)</span><span class="n">]</span><span class="p">),</span>
+              <span class="n">size</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">show.legend</span> <span class="o">=</span> <span class="bp">T</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span> <span class="o">=</span> <span class="s">&#34;right&#34;</span><span class="p">)</span>  <span class="o">+</span> 
+    <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;Pulse zones on the track&#34;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;HR Zone&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">plot_hrzone_on_ggmap</span><span class="p">(</span><span class="n">df_tcx2e</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will
+## replace the existing scale.
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## Scale for &#39;y&#39; is already present. Adding another scale for &#39;y&#39;, which will
+## replace the existing scale.
+</code></pre></div><p><img src="gps_velo_en_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>Note that the &ldquo;sixth HR zone&rdquo; emerged because I trained with pulse higher than theoretical limit for my age.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Vladislav Borkus</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-03-22
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">(C) Vladislav Borkus</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/r/">R</a>
+          <a href="/tags/rstudio/">RStudio</a>
+          <a href="/tags/gps/">GPS</a>
+          <a href="/tags/sport/">Sport</a>
+          <a href="/tags/tools/">Tools</a>
+          <a href="/tags/howto/">Howto</a>
+          <a href="/tags/googlemaps/">GoogleMaps</a>
+          <a href="/tags/packages/">Packages</a>
+          <a href="/tags/strava/">Strava</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/2021-03-19-blog_with-hugo/">
+            <span class="next-text nav-default">Blog with R and Hugo</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'vladislavborkus';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="scox3@yandex.ru" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.facebook.com/vlad.borkus/" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://scox3.github.io" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://vladborkus.blogger.com" class="iconfont icon-google" title="google"></a>
+      <a href="https://github.com/scox3" class="iconfont icon-github" title="github"></a>
+  <a href="https://scox3.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>(c) Vladislav Borkus</span>
+  </span>
+</div>
+
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GCECY6T8N0', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sport on Datascience, tools and datasets</title>
+    <link>https://scox3.github.io/tags/sport/</link>
+    <description>Recent content in Sport on Datascience, tools and datasets</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>(c) Vladislav Borkus</copyright>
+    <lastBuildDate>Mon, 22 Mar 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/sport/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Strava tracks analysis in R</title>
+      <link>https://scox3.github.io/post/2021-03-22-gps-velo-en/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/post/2021-03-22-gps-velo-en/</guid>
+      <description>I like to run and ride a bike. I use Endomondo or Strava to write down GPS-tracks of my trainings and despite their commercial analytic capabilities are quite advanced as long as I know R it is compelling to use it to dissect my training data. Below I will tell how I do that.
+Libraries 1. We will need special package XML2 to load data in the XLM formats, the package geosphere to calculate distances on Earth&amp;rsquo;s surface and the set of packages to draw tracks on Google Maps.</description>
+    </item>
+    
+  </channel>
+</rss>

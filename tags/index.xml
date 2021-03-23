@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Datascience, tools and datasets</title>
+    <link>https://scox3.github.io/tags/</link>
+    <description>Recent content in Tags on Datascience, tools and datasets</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>(c) Vladislav Borkus</copyright>
+    <lastBuildDate>Mon, 22 Mar 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GoogleMaps</title>
+      <link>https://scox3.github.io/tags/googlemaps/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/googlemaps/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GPS</title>
+      <link>https://scox3.github.io/tags/gps/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/gps/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Howto</title>
+      <link>https://scox3.github.io/tags/howto/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/howto/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Packages</title>
+      <link>https://scox3.github.io/tags/packages/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/packages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://scox3.github.io/tags/r/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RStudio</title>
+      <link>https://scox3.github.io/tags/rstudio/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/rstudio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sport</title>
+      <link>https://scox3.github.io/tags/sport/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/sport/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Strava</title>
+      <link>https://scox3.github.io/tags/strava/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/strava/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tools</title>
+      <link>https://scox3.github.io/tags/tools/</link>
+      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/tools/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Nightmares</title>
+      <link>https://scox3.github.io/tags/nightmares/</link>
+      <pubDate>Thu, 18 Mar 2021 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/nightmares/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

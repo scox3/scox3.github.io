@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Blog with R and Hugo - Datascience, tools and datasets</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Vladislav Borkus" /><meta name="description" content="Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.
+Basic local setup To create a local copy of the future blog:" /><meta name="keywords" content="R, Data science, Econometrics" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="https://scox3.github.io/post/2021-03-19-blog_with-hugo/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.3a5f39feb4252758bd7abbc1b9b9ca935d821cc19af111e1a22dcae852692ee0.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Blog with R and Hugo" />
+<meta property="og:description" content="Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.
+Basic local setup To create a local copy of the future blog:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://scox3.github.io/post/2021-03-19-blog_with-hugo/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-03-19T20:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2021-03-19T20:00:00&#43;00:00" /><meta property="og:site_name" content="Datascience, tools and datasets" />
+
+<meta itemprop="name" content="Blog with R and Hugo">
+<meta itemprop="description" content="Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.
+Basic local setup To create a local copy of the future blog:"><meta itemprop="datePublished" content="2021-03-19T20:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-03-19T20:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1729">
+<meta itemprop="keywords" content="R,RStudio,Tools,Howto," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Blog with R and Hugo"/>
+<meta name="twitter:description" content="Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.
+Basic local setup To create a local copy of the future blog:"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Data science, tools and datasets</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-03-19-blog_with-hugo/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Data science, tools and datasets</a>
+</div>
+
+
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-03-19-blog_with-hugo/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Blog with R and Hugo</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-03-19 </span>
+        <div class="post-category">
+            <a href="/categories/r/"> R </a>
+            <a href="/categories/rstudio/"> RStudio </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#basic-local-setup">Basic local setup</a></li>
+        <li><a href="#file-catalog-structure">File catalog structure</a></li>
+        <li><a href="#post-formats">Post formats</a></li>
+        <li><a href="#posts-metadata">Posts metadata</a></li>
+        <li><a href="#customization">Customization</a>
+          <ul>
+            <li><a href="#appearance">Appearance</a></li>
+            <li><a href="#mathjax">MathJax</a></li>
+            <li><a href="#comments">Comments</a></li>
+            <li><a href="#google-analytics">Google analytics</a></li>
+            <li><a href="#multilingual-sites">Multilingual sites</a></li>
+            <li><a href="#code-syntax-highlighting">Code syntax highlighting</a></li>
+            <li><a href="#customization-with-shortcodes">Customization with shortcodes</a></li>
+          </ul>
+        </li>
+        <li><a href="#debugging-and-publishing-the-site">Debugging and publishing the site</a></li>
+        <li><a href="#deploying-the-site-on-github">Deploying the site on GitHub</a></li>
+        <li><a href="#problems">Problems</a>
+          <ul>
+            <li><a href="#future-posts">Future posts</a></li>
+            <li><a href="#always-name-markdown-files-as-index">Always name markdown files as &ldquo;index&rdquo;</a></li>
+            <li><a href="#use-the-correct-date-format">Use the correct date format</a></li>
+            <li><a href="#citations-vs-table-of-contents">Citations vs. Table of contents</a></li>
+          </ul>
+        </li>
+        <li><a href="#links">Links</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://gohugo.io/">Hugo</a> is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.</p>
+<h2 id="basic-local-setup">Basic local setup</h2>
+<p>To create a local copy of the future blog:</p>
+<ol>
+<li>Install the package <em>blogdown</em> in RStudio.</li>
+<li>Create a <em>New Project</em> in RStudio in a new folder. Fill the field &ldquo;Theme&rdquo; to supplement a theme codename in the creation dialog.</li>
+<li>Run <code>blogdown:::serve_site()</code> to enjoy the result.</li>
+</ol>
+<p>The themes catalog can be found <a href="https://themes.gohugo.io/">here</a>. The catalog allows to try living demo of the themes.</p>
+<p>While it is possible to change a theme later with a call to a function <code>blogdown:::new_theme()</code> it is recommended to create the site anew because the theme installer overwrites the config file in the site&rsquo;s root folder.</p>
+<p>The least cluttered and flashy themes to start a technical blog are in my opinion <a href="https://themes.gohugo.io/Mainroad/">Mainroad</a> and <a href="https://themes.gohugo.io/hugo-theme-even/">Even</a>.</p>
+<p>Theme codename is basically it&rsquo;s GitHub repository name in the form <code>&lt;author&gt;/&lt;repository&gt;</code>. For example, for theme Mainroad it is &ldquo;Vimux/Mainroad&rdquo;.</p>
+<h2 id="file-catalog-structure">File catalog structure</h2>
+<table>
+<thead>
+<tr>
+<th>File/Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>config.yaml</td>
+<td>Global site parameters (Title, author name, baseURL, etc. will be here).</td>
+</tr>
+<tr>
+<td>contents</td>
+<td>Folder with source code for posts.</td>
+</tr>
+<tr>
+<td>themes</td>
+<td>The theme layout will be here.</td>
+</tr>
+<tr>
+<td>public</td>
+<td>The finally generated content for Internet hosting will be here.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="post-formats">Post formats</h2>
+<p>Posts can be written in ordinary Markdown (.md files) or RMarkdown (.Rmd, .RMarkdown files). Depending on the file extension the different parsers will be utilized.</p>
+<p>While HUGO authors argue for using RMD format, and it may be the only adequate way for interactive sites, it also has a lot of drawbacks for static sites:</p>
+<ul>
+<li>The R code will be recalculated for an each post. There are consequences. Firstly, you will need to keep all the source data for computations. And secondly, your R-libraries to change sometime in the future so you may find that your site renders no more.</li>
+<li>There will be no table of contents displayed on post pages due to some persistent bugs in the parser.</li>
+</ul>
+<p>So I prefer to keep computational code separate from the presentation layer and to make hard computations beforehand with an output to lightweight Markdown code to use in Hugo.</p>
+<h2 id="posts-metadata">Posts metadata</h2>
+<p>All information about the post&rsquo;s author, date, keywords, tags, categories, etc. is kept in the post&rsquo;s YAML header. The most convenient way to learn about possible post&rsquo;s properties is to create its template automatically via <code>Addins-&gt;Blogdowns-&gt;New Post</code> or by call to <code>blogdown:::new_post()</code>.</p>
+<h2 id="customization">Customization</h2>
+<h3 id="appearance">Appearance</h3>
+<p>After the theme is installed you may want to customize it at least minimally, i.e. edit the site parameters file <code>config.yaml</code>.</p>
+<p>You may want to customize deeply by editing files in the folder &ldquo;/themes&rdquo;, but it is theme-dependent. For example, to make a wider central column in the theme <em>Even</em> you will need to edit the variable in the file &ldquo;\themes\hugo-theme-even\assets\sass\_variables.scss&rdquo;: <code>$global-body-width: 800px;</code>.</p>
+<p>Page templates and templates for parts of pages are stored in the folder &ldquo;/layout/partials/&rdquo;.</p>
+<h3 id="mathjax">MathJax</h3>
+<p>To force Hugo to render math formulas you will need to:</p>
+<ul>
+<li>Turn on the rendering options in the site&rsquo;s config file.</li>
+<li>Include the MathJax rendering code in the template for pages. For example, it is convenient to include the following code in the footer template (&quot;/layout/partials/footer.html&quot;):</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">	&lt;script type=&#34;text/javascript&#34;
+  src=&#34;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#34;&gt;
+&lt;/script&gt;
+</code></pre></div><p>More information about enabling MathJax is <a href="https://bwaycer.github.io/hugo_tutorial.hugo/tutorials/mathjax/">here</a>.</p>
+<p>If you are using MD format to write posts, you may need to envelope $$ math code blocks in <code>&lt;div&gt;&lt;/div&gt;</code>. Rendering of math formulas for posts in RMD format should work out of the box.</p>
+<h3 id="comments">Comments</h3>
+<p>Comments are allowed by supplying your Disquss name into the config file:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">comment: true
+disqusShortname: &lt;yourdiscussshortname&gt;
+</code></pre></div><p>More information about comments setup is <a href="https://gohugo.io/content-management/comments/">here</a></p>
+<h3 id="google-analytics">Google analytics</h3>
+<p>To allow for Google Analytics supply your Google Analytics tracking ID into the sites&rsquo;s options file:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">googleAnalytics: &lt;Google Analytics ID&gt;
+</code></pre></div><h3 id="multilingual-sites">Multilingual sites</h3>
+<p>There are two ways to make <a href="https://gohugo.io/content-management/multilingual/">multilingual content</a>:</p>
+<ul>
+<li>By using <code>.en</code> <code>.ru</code> etc. suffixes in posts filenames, eg. <code>index.ru.md</code>.</li>
+<li>By using the different content sub-directories for each of the languages, i.e.:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">content/en/&lt;posts&gt;
+content/ru/&lt;posts&gt;
+</code></pre></div><p>Each language’s content directory is pointed to using the <code>contentDir</code> param in the site&rsquo;s configuration file. For example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">languages:
+  en:
+    title: Datascience, tools and datasets
+    contentDir: content/en
+    languageName: English
+    weight: 2
+  ru:
+    title: Datascience, tools and datasets
+    languageName: Russian
+    contentDir: content/ru
+    weight: 1
+</code></pre></div><p>It is also possible to add content switch to the site&rsquo;s main menu (at least in the theme <em>Even</em>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">showLanguageSelector: true
+
+</code></pre></div><p>It is possible to use the field <code>translationKey</code> in YAML headers of posts. The posts with the same <code>translationKey</code> value will be treated by Hugo as lingual versions of the same post so they may use common resources (eg. figures).</p>
+<h3 id="code-syntax-highlighting">Code syntax highlighting</h3>
+<p>As is explained <a href="https://bwaycer.github.io/hugo_tutorial.hugo/extras/highlighting/">here</a> Hugo uses the <a href="https://pygments.org/docs/formatters/">Pygments</a> library to highlight syntax. This is controlled by an option <code>pygmentsUseClasses</code> in the config file.</p>
+<p>If you set it to <code>true</code> you must <a href="https://gohugo.io/content-management/syntax-highlighting/#generate-syntax-highlighter-css">generate Pygments css-style</a> or download already precompiled CCS-file from <a href="https://github.com/richleland/pygments-css/find/master">here</a> and substitute the &ldquo;code.CSS&rdquo; inside the theme with it. The styles gallery may be found <a href="https://xyproto.github.io/splash/docs/all.html">here</a>.</p>
+<p>In the theme <em>Evan</em> such CSS file is called &ldquo;_code.scss&rdquo;. A downloaded new CSS file must replace it. This is the only way in <em>Evan</em> which offers only the single build in code highlighting style. Code rendering may be slightly controlled by other Pygments options, i. e. <code>pygmentsOptions: linenos=false</code> switches off line numbering.</p>
+<p>In the theme <em>Mainroad</em> it is possible to set this parameter to <code>false</code> and customize code blocks with a little more transparent syntax, the <code>markup</code> block of parameters in the config file. For instance, it is possible to directly supply <code>style</code> name, to set whever or not Hugo should count code lines, etc.:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">markup:
+  highlight:
+    style: monokai
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: false
+    hl_Lines: &#34;&#34;
+    lineAnchors: &#34;&#34;
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    noClasses: true
+    tabWidth: 4
+</code></pre></div><p>More about syntax highlighting is <a href="https://gohugo.io/getting-started/configuration-markup/#highlight">here</a>.</p>
+<h3 id="customization-with-shortcodes">Customization with shortcodes</h3>
+<p>You may include so called shortcodes in your posts, that are calls to templates to be executed with a result substituted into the post. Each shortcode is associated with some HTML-template by name. You can create your own shortcodes and templates, allowing to extend the page functionality. Quite powerful mechanism but difficult to debug. Shortcodes are discussed <a href="https://gohugo.io/content-management/shortcodes/">here</a>.</p>
+<h2 id="debugging-and-publishing-the-site">Debugging and publishing the site</h2>
+<p>The command <code>blogdown::serve_site()</code> compiles all sources and start a local copy of web-server. The site is updated dynamically, so if you change posts the changes will be immediately reflected on site&rsquo;s pages.</p>
+<p>Use <code>blogdown::stop_server()</code> to stop the local server.</p>
+<p>Use <code>blogdown::hugo_build()</code> to render output that will be hosted publicly (the output is places in the folder &ldquo;/public&rdquo;).</p>
+<h2 id="deploying-the-site-on-github">Deploying the site on GitHub</h2>
+<p>Compiled site may be deployed anywhere, for example in the GitHub repository. The process is staighforward and is described <a href="https://pages.github.com/">here</a>.</p>
+<h2 id="problems">Problems</h2>
+<h3 id="future-posts">Future posts</h3>
+<p>Sometimes it is convenient to create a post that will be always on top in the site&rsquo;s posts list. For example it will contain links to the most important posts. To do so you will need to set its date somewhere in far future. Unfortunately HUGO will skip such posts by default when rendering the &ldquo;/public&rdquo; folder. To change this behavior to set the following option:<code>buildFuture: true</code> in the config file.</p>
+<p>It also is possible to allow or forbid rendering of drafts and expired posts:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">buildDrafts: false
+buildExpired: true
+</code></pre></div><h3 id="always-name-markdown-files-as-index">Always name markdown files as &ldquo;index&rdquo;</h3>
+<p>While it is possible to name source files arbitrarily it is better due to bugs to follow the rules:</p>
+<ul>
+<li>Use a separate folder for each if the posts;</li>
+<li>Place a main content of a post in the files &ldquo;index.md&rdquo; or &ldquo;index.rmd&rdquo;.</li>
+</ul>
+<h3 id="use-the-correct-date-format">Use the correct date format</h3>
+<p>It is better to supply a date in a YAML header in the form <code>2021-03-19T20:00:00-00:00</code>. Otherwise the parser may process it wrongly.</p>
+<h3 id="citations-vs-table-of-contents">Citations vs. Table of contents</h3>
+<p>Here we go: due to some bug in the RMD parser and limitations in the MD parser you can either include  BIB-style references to a bibliography or display table of contents but not both. Here are some discussions with some inspiring ideas of workarounds but no good solution:</p>
+<ul>
+<li><a href="https://ma.ttias.be/adding-a-sticky-table-of-contents-in-hugo-to-posts/">&ldquo;Adding a sticky table of contents in Hugo to posts&rdquo;</a>,</li>
+<li><a href="https://discourse.gohugo.io/t/tableofcontents-in-markdown/3007">&quot;.TableOfContents in Markdown&quot;</a>,</li>
+<li><a href="http://5.9.10.113/65999758/toc-not-displaying-in-blogdown-post-hugo-theme-even">&ldquo;TOC not displaying in Blogdown post (Hugo theme Even)&quot;</a>,</li>
+<li><a href="https://community.rstudio.com/t/preserve-toc-true-in-yaml-front-matter-for-hugo/47192">&ldquo;Preserve toc:true in YAML front matter for Hugo&rdquo;</a>,</li>
+<li><a href="https://github.com/gohugoio/hugo/issues/225">&ldquo;customize the template for .TableOfContents #225&rdquo;</a>.</li>
+</ul>
+<h4 id="half-solution-1-keep-citations-no-toc">Half-solution 1: Keep citations, no TOC</h4>
+<p>The main idea is to keep interim MD-file created when processing of an RMD-source file and rename its suffix to &ldquo;.Rmd&rdquo; again for puplishing.<br>
+Steps:<br>
+1. Set YAML header options <code>keep_md: true</code>, <code>self_contained: no</code>, <code>preserve_yaml: yes</code> for <code>blogdown::html_output</code>.<br>
+2. <em>Knitr</em> project RMD file to  <em>blogdown::html_output</em>.<br>
+3. Copy the created MD file to <code>/content/post/&lt;post-name&gt;</code> with renaming it to <code>index.Rmd</code>.<br>
+4. Copy the created pictures folder, BIB-file, CLS-file.<br>
+The small problem persists: references to the bibliography in the text will be static, i.e. as in a paper book.</p>
+<h4 id="half-soultion-2-keep-toc-no-citations">Half-soultion 2: Keep TOC, no citations</h4>
+<p>The main idea is to keep interim MD-file as it is.<br>
+Steps:<br>
+1. Set YAML header options <code>keep_md: true</code>, <code>self_contained: no</code>, <code>preserve_yaml: yes</code> for <code>blogdown::html_output</code>.<br>
+2. <em>Knitr</em> project RMD file to  <em>blogdown::html_output</em>.<br>
+3. Copy the created MD file to <code>/content/post/&lt;post-name&gt;</code> with renaming it to <code>index.md</code>.<br>
+4. Copy the created pictures folder (BIB-file, CLS-file will be useless.)</p>
+<h4 id="unworkable-ideas">Unworkable ideas:</h4>
+<p>1. Compile an html-file with a bibliography and a TOC separately and copy it to Hugo. Error: HTML-file is ignored by Hugo.<br>
+2. Use pandoc to augment an interim MD-file with a bibliography. Ex.<code>C:\Program Files\Pandoc\pandoc.exe&quot;  r-text.md -t markdown-citations -s --bibliography r-text.bib --csl journal-of-web-semantics.csl --no-highlight -o index.md</code>. Error: The blocks of html-code generated when compiling RMD to MD are marked as code citations block.<br>
+3. Compile an html-file with a bibliography and  TOC  separately and convert it back to MD with PanDoc. Ex. <code>C:\Program Files\Pandoc\pandoc.exe&quot; -w markdown+escaped_line_breaks r-text.html -o index.md --wrap=preserve --atx-headers</code>. Copy an YAML header to a newly generated MD-file. Error: Because of usage of &ldquo;strict&rdquo; markup there will be confusion in formatting. But use of PanDoc&rsquo;s own markup will also cause errors in formatting.<br>
+4. Use of shortcodes in RMD causes Hugo to crash due to emptiness in .TableOfContent variable.</p>
+<h2 id="links">Links</h2>
+<p>1. <a href="https://gohugo.io/getting-started/configuration/">Configuration manual</a><br>
+2. <a href="https://bookdown.org/yihui/rmarkdown/notebook.html">RMarkdown manual</a><br>
+3. <a href="https://gohugo.io/content-management/multilingual">Multilanguage setup</a><br>
+4. <a href="https://gohugo.io/content-management/shortcodes/">Shortcodes manual</a><br>
+5. <a href="https://bwaycer.github.io/hugo_tutorial.hugo/tutorials/mathjax/">MaxJax manual</a>.<br>
+6. <a href="https://cran.r-project.org/web/packages/ymlthis/vignettes/yaml-fieldguide.html">The YAML Fieldguide - list of the YAML header
+fields</a></p>
+<p>7. <a href="https://gohugo.io/templates/">Documentation about themes template customization</a><br>
+8. <a href="https://gohugo.io/content-management/comments/">Setting up comments</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Vladislav Borkus</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-03-19
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">(C) Vladislav Borkus</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/r/">R</a>
+          <a href="/tags/rstudio/">RStudio</a>
+          <a href="/tags/tools/">Tools</a>
+          <a href="/tags/howto/">Howto</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/2021-03-22-gps-velo-en/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Strava tracks analysis in R</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/2021-03-18-rmarkdown-nightnames/">
+            <span class="next-text nav-default">Rmarkdown nightmares (updated)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'vladislavborkus';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="scox3@yandex.ru" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.facebook.com/vlad.borkus/" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://scox3.github.io" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://vladborkus.blogger.com" class="iconfont icon-google" title="google"></a>
+      <a href="https://github.com/scox3" class="iconfont icon-github" title="github"></a>
+  <a href="https://scox3.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>(c) Vladislav Borkus</span>
+  </span>
+</div>
+
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GCECY6T8N0', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<?xml-stylesheet type="text/xsl" href="https://scox3.github.io/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://scox3.github.io/ru/about/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/googlemaps/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/gps/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/howto/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/howto/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/packages/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/packages/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/r/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/r/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/rstudio/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/rstudio/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/sport/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/strava/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/tools/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-03-22-gps-velo-ru/</loc>
+    <lastmod>2021-03-22T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+</urlset>

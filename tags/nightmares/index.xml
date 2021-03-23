@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nightmares on Datascience, tools and datasets</title>
+    <link>https://scox3.github.io/tags/nightmares/</link>
+    <description>Recent content in Nightmares on Datascience, tools and datasets</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>(c) Vladislav Borkus</copyright>
+    <lastBuildDate>Thu, 18 Mar 2021 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/nightmares/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rmarkdown nightmares (updated)</title>
+      <link>https://scox3.github.io/post/2021-03-18-rmarkdown-nightnames/</link>
+      <pubDate>Thu, 18 Mar 2021 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/post/2021-03-18-rmarkdown-nightnames/</guid>
+      <description>Setup 1. Show whitespaces. It would be clever to check the option &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Display-&amp;gt;Show whitespace characters&amp;rdquo; in RStudio. Otherwise you will never know how many whitespaces you put at the end of a line, and then you may spend a lot of time figuring errors in paragraphs formatting. The rule of two spaces to end a paragraph is not the best feature of the markup language.
+2. UTF8. If you use languages other than English to write your posts, do not forget to check &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Saving-&amp;gt;Default&amp;rdquo; to set text encoding to UTF8, otherwise knitr will produce gibberish.</description>
+    </item>
+    
+  </channel>
+</rss>
