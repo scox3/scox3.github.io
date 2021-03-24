@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Mon, 22 Mar 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/howto/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/howto/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dataset compillation: Telegram and HTML parsing for COVID-19 epidemic data</title>
+      <link>https://scox3.github.io/post/2021-03-24-parse-telegram-covid/</link>
+      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/post/2021-03-24-parse-telegram-covid/</guid>
+      <description>The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
+The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i.</description>
+    </item>
+    
     <item>
       <title>Strava tracks analysis in R</title>
       <link>https://scox3.github.io/post/2021-03-22-gps-velo-en/</link>
@@ -34,8 +44,8 @@ Basic local setup To create a local copy of the future blog:</description>
       <pubDate>Thu, 18 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/post/2021-03-18-rmarkdown-nightnames/</guid>
-      <description>Setup 1. Show whitespaces. It would be clever to check the option &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Display-&amp;gt;Show whitespace characters&amp;rdquo; in RStudio. Otherwise you will never know how many whitespaces you put at the end of a line, and then you may spend a lot of time figuring errors in paragraphs formatting. The rule of two spaces to end a paragraph is not the best feature of the markup language.
-2. UTF8. If you use languages other than English to write your posts, do not forget to check &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Saving-&amp;gt;Default&amp;rdquo; to set text encoding to UTF8, otherwise knitr will produce gibberish.</description>
+      <description>Setup Show whitespaces It would be clever to check the option &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Display-&amp;gt;Show whitespace characters&amp;rdquo; in RStudio. Otherwise you will never know how many whitespaces you put at the end of a line, and then you may spend a lot of time figuring errors in paragraphs formatting. The rule of two spaces to end a paragraph is not the best feature of the markup language.
+UTF8 If you use languages other than English to write your posts, do not forget to check &amp;ldquo;Options-&amp;gt;Code-&amp;gt;Saving-&amp;gt;Default&amp;rdquo; to set text encoding to UTF8, otherwise knitr will produce gibberish.</description>
     </item>
     
   </channel>

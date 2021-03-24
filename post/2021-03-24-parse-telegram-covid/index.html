@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Dataset compillation: Telegram and HTML parsing for COVID-19 epidemic data - Datascience, tools and datasets</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Vladislav Borkus" /><meta name="description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
+The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i." /><meta name="keywords" content="R, Data science, Econometrics" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="https://scox3.github.io/post/2021-03-24-parse-telegram-covid/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.3a5f39feb4252758bd7abbc1b9b9ca935d821cc19af111e1a22dcae852692ee0.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Dataset compillation: Telegram and HTML parsing for COVID-19 epidemic data" />
+<meta property="og:description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
+The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://scox3.github.io/post/2021-03-24-parse-telegram-covid/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2024-03-24T10:10:00&#43;00:00" />
+<meta property="article:modified_time" content="2024-03-24T10:10:00&#43;00:00" /><meta property="og:site_name" content="Datascience, tools and datasets" />
+
+<meta itemprop="name" content="Dataset compillation: Telegram and HTML parsing for COVID-19 epidemic data">
+<meta itemprop="description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
+The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i."><meta itemprop="datePublished" content="2024-03-24T10:10:00&#43;00:00" />
+<meta itemprop="dateModified" content="2024-03-24T10:10:00&#43;00:00" />
+<meta itemprop="wordCount" content="1166">
+<meta itemprop="keywords" content="R,RStudio,COVID19,XML,Tools,Howto,Packages," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dataset compillation: Telegram and HTML parsing for COVID-19 epidemic data"/>
+<meta name="twitter:description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
+The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Data science, tools and datasets</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-03-24-parse-telegram-covid/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Data science, tools and datasets</a>
+</div>
+
+
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-03-24-parse-telegram-covid/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Dataset compillation: Telegram and HTML parsing for COVID-19 epidemic data</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2024-03-24 </span>
+        <div class="post-category">
+            <a href="/categories/r/"> R </a>
+            <a href="/categories/rstudio/"> RStudio </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#step-1-load-libraries">Step 1. Load libraries.</a></li>
+        <li><a href="#step-2-load-html-file">Step 2. Load HTML file.</a></li>
+        <li><a href="#step-3-extract-data-from-htmlxml-tree">Step 3. Extract data from HTML/XML tree.</a></li>
+        <li><a href="#some-visualizations">Some visualizations</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.</p>
+<p>The first step is to download Telegram chat stream. That can be easily done with the desktop <a href="https://winaero.com/export-chat-history-file-telegram-desktop/">Telegram client</a> so I will skip this step and assume that the necessary data, i.e. a set of files &ldquo;messages.html&rdquo; is ready (<a href="https://drive.google.com/drive/folders/1RxlKL6kQ1FtsFyg9v-AutkkwGJbdNnja?usp=sharing">here is the copy</a>). Below I will explain how to convert them into a dataset.</p>
+<h2 id="step-1-load-libraries">Step 1. Load libraries.</h2>
+<p>I will need the usual stuff plus the package <code>rvest</code> to load HTML data and <code>XML2</code> to process the HTML DOM tree.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Usual libraries</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">purrr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">stringi</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+
+<span class="c1">#HTML processing</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">rvest</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">xml2</span><span class="p">)</span>
+
+<span class="c1">#For ACF plots</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span>
+
+<span class="c1">#Regression trees</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">rpart</span><span class="p">)</span>
+</code></pre></div><h2 id="step-2-load-html-file">Step 2. Load HTML file.</h2>
+<p>To load HTML data the function <code>read_html()</code> from the package <code>rvest</code> may be used. I assume the data are stored in the folder <code>data</code>. While the Telegram function &ldquo;Export&rdquo; created several files with messages I will use only one file with the most recent messages.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">html1</span> <span class="o">&lt;-</span> <span class="nf">read_html</span><span class="p">(</span><span class="s">&#34;data/messages3.html&#34;</span><span class="p">)</span>
+</code></pre></div><p>To check if the data are correctly loaded the function <code>xml_name()</code> may be used. It will show the name of the root node. It is <code>html</code> in this case so everything looks ok.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">xml_name</span><span class="p">(</span><span class="n">html1</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;html&#34;
+</code></pre></div><h2 id="step-3-extract-data-from-htmlxml-tree">Step 3. Extract data from HTML/XML tree.</h2>
+<p>The following steps are bases on the knowledge of the DOM structure that can be viewed in the Chrome or Firefox browsers after pressing F12 key.</p>
+<p>The task is to find the first <code>div</code> node in the document that satisfies the search criteria:\</p>
+<ul>
+<li>the element should have the attribute &ldquo;class&rdquo;&quot; (that is indicated by <code>@class</code> construction in the xpath query);\</li>
+<li>the &ldquo;class&rdquo; attribute value should be equal to &ldquo;history&rdquo;.</li>
+</ul>
+<p>To indicate that the search must be performed globally, the xpath query starts with &ldquo;<code>//</code>.&rdquo;</p>
+<p>The resulting query looks like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">div_history</span> <span class="o">&lt;-</span> <span class="nf">xml_find_first</span><span class="p">(</span><span class="n">html1</span><span class="p">,</span> <span class="n">xpath</span><span class="o">=</span><span class="s">&#34;//div[@class=\&#34;history\&#34;]&#34;</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">capture</span> <span class="o">&lt;-</span> <span class="nf">capture.output</span><span class="p">(</span> <span class="nf">print</span><span class="p">(</span><span class="n">div_history</span><span class="p">)</span> <span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">capture</span><span class="p">,</span> <span class="m">7</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;{html_node}&#34;                                                                             
+## [2] &#34;&lt;div class=\&#34;history\&#34;&gt;&#34;                                                                 
+## [3] &#34; [1] &lt;a class=\&#34;pagination block_link\&#34; href=\&#34;messages2.html\&#34;&gt;\\nPrevious messag ...&#34;  
+## [4] &#34; [2] &lt;div class=\&#34;message service\&#34; id=\&#34;message-269\&#34;&gt;\\n\\n      &lt;div class=\&#34;body ...&#34;
+## [5] &#34; [3] &lt;div class=\&#34;message default clearfix\&#34; id=\&#34;message2038\&#34;&gt;\\n\\n      &lt;div cl ...&#34; 
+## [6] &#34; [4] &lt;div class=\&#34;message default clearfix\&#34; id=\&#34;message2039\&#34;&gt;\\n\\n      &lt;div cl ...&#34; 
+## [7] &#34; [5] &lt;div class=\&#34;message service\&#34; id=\&#34;message-270\&#34;&gt;\\n\\n      &lt;div class=\&#34;body ...&#34;
+</code></pre></div><p>The structure of the stream is following:\</p>
+<ul>
+<li>The nodes with the class &ldquo;message service&rdquo; are the ones that containing the publication date.\</li>
+<li>The messages with the information we seek have the class attribute &ldquo;message default clearfix joined&rdquo; (i.e. text with a picture).</li>
+</ul>
+<p>Below I use the function <code>xml_find_all()</code> with the insane <code>хpath</code> argument to extract both nodes containing dates and nodes with COVID cases information. The symbol &ldquo;|&rdquo; in the <code>xpath</code> merges the two search conditions.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">nodes1</span> <span class="o">&lt;-</span> <span class="nf">xml_find_all</span><span class="p">(</span><span class="n">div_history</span><span class="p">,</span> <span class="n">xpath</span><span class="o">=</span><span class="s">&#34;.//div[@class=&#39;message service&#39;]/div[@class=&#39;body details&#39;] | .//div[@class=&#39;message default clearfix joined&#39;]/div[@class=&#39;body&#39;]/div[@class=&#39;text&#39;]&#34;</span><span class="p">)</span> 
+</code></pre></div><p>Now is the time to create the new function <code>try_to_extract_date()</code> that tests the node if it contains a date of the publication and in that case it tries to extract the date.</p>
+<p>The following needs to be noted:\</p>
+<ul>
+<li>I will use the specific form of the argument <code>xpath</code> to force <code>xml_find_first()</code> to check the node to satisfy the criteria but not to select the node. The returned value will be logical;\</li>
+<li>the function <code>xml_text()</code> will be used to extract a date in text format;\</li>
+<li>All whitespaces will be removed from the date string;\</li>
+<li>I will temporarily switch to USA time locale for type conversion in <code>as.Date().</code> This is necessary because the dates in Telegram stream are published in the USA locale, and my R is running in Russian locale;\</li>
+<li><code>%B</code> symbol in the <code>as.Date()</code> format argument is used to indicate that a month is supplied by a name not by its number.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">try_to_extract_date</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">if</span><span class="p">(</span> <span class="nf">xml_find_first</span><span class="p">(</span> <span class="n">node</span><span class="p">,</span> <span class="n">xpath</span><span class="o">=</span><span class="s">&#34;@class=&#39;body details&#39;&#34;</span><span class="p">)</span> <span class="p">)</span>   <span class="p">{</span>
+    <span class="c1">#this is a date record</span>
+    
+    <span class="n">loc1</span> <span class="o">&lt;-</span> <span class="nf">Sys.getlocale</span><span class="p">(</span><span class="n">category</span> <span class="o">=</span> <span class="s">&#34;LC_TIME&#34;</span><span class="p">)</span>
+    <span class="nf">Sys.setlocale</span><span class="p">(</span><span class="n">category</span> <span class="o">=</span> <span class="s">&#34;LC_TIME&#34;</span><span class="p">)</span>
+    <span class="nf">Sys.setlocale</span><span class="p">(</span><span class="s">&#34;LC_TIME&#34;</span><span class="p">,</span> <span class="s">&#34;English&#34;</span><span class="p">)</span> <span class="c1"># Win </span>
+    
+    <span class="n">date1</span> <span class="o">&lt;-</span> <span class="n">node</span> <span class="o">%&gt;%</span> <span class="nf">xml_text</span><span class="p">()</span> <span class="o">%&gt;%</span>
+      <span class="nf">str_replace_all</span><span class="p">(</span><span class="s">&#34;\\s&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+      <span class="nf">as.Date</span><span class="p">(</span><span class="s">&#34;%d%B%Y&#34;</span><span class="p">)</span>
+  
+    <span class="nf">Sys.setlocale</span><span class="p">(</span><span class="s">&#34;LC_TIME&#34;</span><span class="p">,</span> <span class="n">loc1</span><span class="p">)</span>
+    <span class="nf">return</span><span class="p">(</span><span class="n">date1</span><span class="p">)</span>
+  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+    <span class="nf">return</span><span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">try_to_extract_date</span><span class="p">(</span><span class="n">nodes1[[1]]</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;2020-11-23&#34;
+</code></pre></div><p>The second function will check the node to contain the data I seek. The following code decisions should be noted:\</p>
+<ul>
+<li>The text will be transliterated from Russian with the function <code>stri_trans_general()</code> from the package <code>stingi</code> for regexp to work;\</li>
+<li>The extraction itself will be done by the function <code>str_extract()</code> from the package <code>stringr</code>.\</li>
+<li>I will use <code>purrr</code> chained operation to streamline the code.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">try_to_extract_info</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">#Selection</span>
+
+  <span class="n">s</span> <span class="o">&lt;-</span> <span class="nf">xml_text</span><span class="p">(</span> <span class="n">node</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">stri_trans_general</span><span class="p">(</span><span class="s">&#34;russian-latin/bgn&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">str_replace_all</span><span class="p">(</span><span class="s">&#34;\\s&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">str_to_lower</span><span class="p">()</span>
+
+
+  <span class="nf">if</span><span class="p">(</span> <span class="o">!</span><span class="nf">str_detect</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&#34;gospitalizirov&#34;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nf">return</span><span class="p">(</span><span class="kc">NULL</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="c1">#Extraction</span>
+  
+  <span class="n">new_hosp</span> <span class="o">&lt;-</span> <span class="n">s</span> <span class="o">%&gt;%</span> 
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;gospitalizirov\\D+\\d{1,6}\\D&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;\\d+&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">as.numeric</span><span class="p">()</span>
+  
+  <span class="n">new_diag</span> <span class="o">&lt;-</span> <span class="n">s</span> <span class="o">%&gt;%</span> 
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;podtverzhd\\D+\\d{1,6}&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;\\d+&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">as.numeric</span><span class="p">()</span>
+  
+  <span class="n">curr_ivl</span> <span class="o">&lt;-</span> <span class="n">s</span> <span class="o">%&gt;%</span> 
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;naivlvbol\\D+\\d{1,6}\\D&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;\\d+&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">as.numeric</span><span class="p">()</span>
+
+  <span class="n">new_dead</span> <span class="o">&lt;-</span> <span class="n">s</span> <span class="o">%&gt;%</span> 
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;skonch\\D+\\d{1,6}\\D&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">str_extract</span><span class="p">(</span><span class="s">&#34;\\d+&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">as.numeric</span><span class="p">()</span>
+  
+  <span class="nf">return</span><span class="p">(</span> <span class="nf">list</span><span class="p">(</span><span class="n">new_hosp</span><span class="o">=</span><span class="n">new_hosp</span><span class="p">,</span> <span class="n">new_diag</span><span class="o">=</span><span class="n">new_diag</span><span class="p">,</span>
+          <span class="n">curr_ivl</span><span class="o">=</span><span class="n">curr_ivl</span><span class="p">,</span> <span class="n">new_dead</span><span class="o">=</span><span class="n">new_dead</span><span class="p">))</span>     
+
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">try_to_extract_info</span><span class="p">(</span><span class="n">nodes1[[3]]</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## $new_hosp
+## [1] 1648
+## 
+## $new_diag
+## [1] 5838
+## 
+## $curr_ivl
+## [1] 429
+## 
+## $new_dead
+## [1] NA
+</code></pre></div><p>Now it is time to iterate over the nodes list extracting either date or data and gluing them into a single data frame.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">data1</span> <span class="o">&lt;-</span> <span class="nf">vector</span><span class="p">(</span> <span class="nf">length</span><span class="p">(</span><span class="n">nodes1</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#34;list&#34;</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">&lt;-</span> <span class="m">1</span>
+<span class="n">n0</span> <span class="o">&lt;-</span> <span class="m">0</span>
+<span class="n">n</span> <span class="o">&lt;-</span> <span class="nf">length</span><span class="p">(</span><span class="n">nodes1</span><span class="p">)</span>
+<span class="n">curr_date</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
+
+<span class="nf">while</span><span class="p">(</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="p">)</span> <span class="p">{</span>
+
+  <span class="n">s</span> <span class="o">&lt;-</span><span class="nf">try_to_extract_date</span><span class="p">(</span> <span class="n">nodes1[[i]]</span><span class="p">)</span> 
+  <span class="nf">if</span><span class="p">(</span> <span class="o">!</span><span class="nf">is.null</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">curr_date</span> <span class="o">&lt;-</span> <span class="n">s</span> 
+  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+    <span class="n">s</span> <span class="o">&lt;-</span><span class="nf">try_to_extract_info</span><span class="p">(</span> <span class="n">nodes1[[i]]</span><span class="p">)</span> 
+      <span class="nf">if</span><span class="p">(</span> <span class="o">!</span><span class="nf">is.null</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">n0</span> <span class="o">&lt;-</span> <span class="n">n0</span><span class="m">+1</span>
+        <span class="n">data1[[n0]]</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">data1[[n0]]</span><span class="o">$</span><span class="n">date</span> <span class="o">&lt;-</span> <span class="n">curr_date</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">i</span> <span class="o">&lt;-</span> <span class="n">i</span><span class="m">+1</span>
+<span class="p">}</span>
+
+<span class="n">dt.data</span> <span class="o">&lt;-</span> <span class="nf">rbindlist</span><span class="p">(</span> <span class="n">data1[1</span><span class="o">:</span><span class="n">n0]</span><span class="p">)</span>
+</code></pre></div><p>Congratulations with success.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">dt.data[1</span><span class="o">:</span><span class="m">5</span><span class="n">]</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">##    new_hosp new_diag curr_ivl new_dead       date
+## 1:     1648     5838      429       NA 2020-11-24
+## 2:     1635     4685      440       NA 2020-11-25
+## 3:     1759     6075      437       NA 2020-11-26
+## 4:     1518     7320      419       NA 2020-11-28
+## 5:     1376     6524      431       NA 2020-12-01
+</code></pre></div><p>Store the dataset for later use.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">write.csv</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s">&#34;covid-moscow-dataset.csv&#34;</span><span class="p">)</span>
+</code></pre></div><h2 id="some-visualizations">Some visualizations</h2>
+<p>Now it is time to plot the data!</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Diagnosed&#34;</span><span class="p">))</span><span class="o">+</span>
+  <span class="nf">geom_path</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">new_hosp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Hospitilized&#34;</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: Number of hospitalized and diagnosed patiens &#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Date&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Number of patients&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>No indication for periodicity in the auto correlation function.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggAcf</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">new_diag</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;MSK Covid-19: ACF of the new cases number time series&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>No clear indication for a time lag between the two series. However cross correlation function is more biases towards negative lags as it should be: diagnostic sightly precedes hospitalizations.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">ccf1</span> <span class="o">&lt;-</span> <span class="nf">ccf</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">dt.data</span><span class="o">$</span><span class="n">new_hosp</span><span class="p">,</span> 
+            <span class="n">plot</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+
+<span class="n">df.ccf1</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">ccf</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">acf</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">lag</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="nf">data.frame</span><span class="p">(</span><span class="n">ccf</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">acf</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">lag</span><span class="p">),</span> <span class="nf">aes</span><span class="p">(</span><span class="n">lag</span><span class="p">,</span> <span class="n">ccf</span><span class="p">))</span><span class="o">+</span>
+  <span class="nf">geom_path</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: CCF new cases number ~ new hospitalizations number&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>The ratio of the number of hospitalizations to the number of new cases grows with time. More and more sick people skip official medicine entirely.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Build regression tree for stepwise approximation</span>
+<span class="n">dt.data[</span> <span class="p">,</span> <span class="n">ratio.hosp.diagn</span> <span class="o">:=</span> <span class="n">new_hosp</span><span class="o">/</span><span class="n">new_diag]</span>
+<span class="n">reg.tree</span> <span class="o">&lt;-</span> <span class="nf">rpart</span><span class="p">(</span><span class="n">ratio.hosp.diagn</span> <span class="o">~</span> <span class="n">date</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dt.data</span><span class="p">,</span>
+                  <span class="n">control</span><span class="o">=</span><span class="nf">rpart.control</span><span class="p">(</span><span class="n">cp</span> <span class="o">=</span> <span class="m">0.02</span><span class="p">))</span>
+<span class="n">dt.data[</span> <span class="p">,</span> <span class="n">hosp.rat.tree</span><span class="o">:=</span> <span class="nf">predict</span><span class="p">(</span><span class="n">reg.tree</span><span class="p">,</span> <span class="n">dt.data</span><span class="p">)</span><span class="n">]</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_hosp</span><span class="o">/</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Data&#34;</span><span class="p">))</span><span class="o">+</span>
+  <span class="nf">geom_path</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">geom_smooth</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;Lowess&#34;</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: Ratio of the number of newly hospitalized patiens to\n the number of new registered cases&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Date&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">hosp.rat.tree</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Reg. tree&#34;</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Vladislav Borkus</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2024-03-24
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">(C) Vladislav Borkus</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/r/">R</a>
+          <a href="/tags/rstudio/">RStudio</a>
+          <a href="/tags/covid19/">COVID19</a>
+          <a href="/tags/xml/">XML</a>
+          <a href="/tags/tools/">Tools</a>
+          <a href="/tags/howto/">Howto</a>
+          <a href="/tags/packages/">Packages</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/2021-03-22-gps-velo-en/">
+            <span class="next-text nav-default">Strava tracks analysis in R</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'vladislavborkus';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="scox3@yandex.ru" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.facebook.com/vlad.borkus/" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://scox3.github.io" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://vladborkus.blogger.com" class="iconfont icon-google" title="google"></a>
+      <a href="https://github.com/scox3" class="iconfont icon-github" title="github"></a>
+  <a href="https://scox3.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>(c) Vladislav Borkus</span>
+  </span>
+</div>
+
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GCECY6T8N0', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
