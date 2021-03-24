@@ -52,7 +52,7 @@ UTF8 If you use languages other than English to write your posts, do not forget 
 <meta itemprop="description" content="Setup Show whitespaces It would be clever to check the option &ldquo;Options-&gt;Code-&gt;Display-&gt;Show whitespace characters&rdquo; in RStudio. Otherwise you will never know how many whitespaces you put at the end of a line, and then you may spend a lot of time figuring errors in paragraphs formatting. The rule of two spaces to end a paragraph is not the best feature of the markup language.
 UTF8 If you use languages other than English to write your posts, do not forget to check &ldquo;Options-&gt;Code-&gt;Saving-&gt;Default&rdquo; to set text encoding to UTF8, otherwise knitr will produce gibberish."><meta itemprop="datePublished" content="2021-03-18T10:10:00&#43;00:00" />
 <meta itemprop="dateModified" content="2021-03-18T10:10:00&#43;00:00" />
-<meta itemprop="wordCount" content="680">
+<meta itemprop="wordCount" content="685">
 <meta itemprop="keywords" content="R,RStudio,Nightmares,Tools,Howto," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Rmarkdown nightmares (updated)"/>
 <meta name="twitter:description" content="Setup Show whitespaces It would be clever to check the option &ldquo;Options-&gt;Code-&gt;Display-&gt;Show whitespace characters&rdquo; in RStudio. Otherwise you will never know how many whitespaces you put at the end of a line, and then you may spend a lot of time figuring errors in paragraphs formatting. The rule of two spaces to end a paragraph is not the best feature of the markup language.
@@ -208,22 +208,22 @@ UTF8 If you use languages other than English to write your posts, do not forget 
         </li>
         <li><a href="#markdown-tricks">Markdown tricks</a>
           <ul>
-            <li><a href="#spaces-in-headers"><strong>Spaces in headers</strong></a></li>
-            <li><a href="#numbering-of-paragraphs"><strong>Numbering of paragraphs</strong></a></li>
+            <li><a href="#spaces-in-headers">Spaces in headers</a></li>
+            <li><a href="#numbering-of-paragraphs">Numbering of paragraphs</a></li>
             <li><a href="#custom-counters">Custom counters</a></li>
             <li><a href="#verbatim-code">Verbatim code</a></li>
           </ul>
         </li>
         <li><a href="#knitr">Knitr</a>
           <ul>
-            <li><a href="#extraction-of-r-code"><strong>Extraction of R code</strong></a></li>
-            <li><a href="#knitr-mysteriously-fails"><strong>Knitr mysteriously fails</strong></a></li>
+            <li><a href="#extraction-of-r-code">Extraction of R code</a></li>
+            <li><a href="#knitr-mysteriously-fails">Knitr mysteriously fails</a></li>
           </ul>
         </li>
         <li><a href="#bookdown-and-blogdown">Bookdown and blogdown</a>
           <ul>
             <li><a href="#bibliography">Bibliography</a></li>
-            <li><a href="#extraction-of-pictures"><strong>Extraction of pictures</strong></a></li>
+            <li><a href="#extraction-of-pictures">Extraction of pictures</a></li>
           </ul>
         </li>
         <li><a href="#update-rstudio-to-v-14">Update RStudio to v. 1.4</a></li>
@@ -241,17 +241,28 @@ UTF8 If you use languages other than English to write your posts, do not forget 
 <h3 id="utf8">UTF8</h3>
 <p>If you use languages other than English to write your posts, do not forget to check &ldquo;Options-&gt;Code-&gt;Saving-&gt;Default&rdquo; to set text encoding to UTF8, otherwise knitr will produce gibberish.</p>
 <h2 id="markdown-tricks">Markdown tricks</h2>
-<h3 id="spaces-in-headers"><strong>Spaces in headers</strong></h3>
+<h3 id="spaces-in-headers">Spaces in headers</h3>
 <p>Never forget to place a space after header markup code &ldquo;<code>##</code>&rdquo;. Otherwise knitr will parse a header&rsquo;s text as an ordinary paragraph. Much to your surprise.</p>
-<h3 id="numbering-of-paragraphs"><strong>Numbering of paragraphs</strong></h3>
+<h3 id="numbering-of-paragraphs">Numbering of paragraphs</h3>
 <p>Sometimes you will want to manually number paragraphs or sections of a text. Build in functionality allows for use of numbered lists but they are inconvenient in many cases. More so if you follow a paragraph number with a dot like <code>1. Some text</code> it will be formatted as an element of a list. Precede this dot with backslash to trick the parser:<br>
 <code>1\. Paragraph text</code> .</p>
 <h3 id="custom-counters">Custom counters</h3>
-<p>You may create your own counter for paragraphs like {r, echo=FALSE, include=FALSE} pc1 &lt;- nextpar() &lt;- function(restart=FALSE){ if(restart) { pc1&lt;&lt;-0 } pc1&lt;&lt;-pc1+1 return(pc1) }</p>
+<p>You may create your own counter for paragraphs like</p>
+<pre><code>{r, echo=FALSE, include=FALSE} 
+  pc1 &lt;- 0
+  nextpar() &lt;- function(restart=FALSE)
+  { 
+    if(restart){ 
+    pc1 &lt;&lt;-0 
+  } 
+  pc1 &lt;&lt;- pc1+1 return(pc1)
+  }
+}
+</code></pre>
 <p>and use it in inline R code at the beginning of paragraphs &lsquo;r nextpar()&rsquo;</p>
 <h3 id="verbatim-code">Verbatim code</h3>
 <p>It is nightmare to quote code blocks with backticks. There is no convenient way to suppress estimation of inline R-code snippets. Backslashing of backticks does not work by whatever reason. The hacks to show verbatim code chunks may be found <a href="https://bookdown.org/yihui/rmarkdown-cookbook/verbatim-code-chunks.html">here</a>.</p>
-<p>The is is to use a lot of backticks and put the new line marker after &ldquo;r&rdquo; in an inline <code>`r `</code> code to confuse the parser. To quote this code envelope it with double backticks. The code above is produced by code:</p>
+<p>The idea is to use a lot of backticks and put the new line marker after &ldquo;r&rdquo; in an inline <code>`r `</code> code to confuse the parser. To quote this code envelope it with double backticks. The code above is produced by code:</p>
 <pre><code>`` `r
 cnt&lt;-cnt+1; cnt` ``
 </code></pre>
@@ -271,16 +282,16 @@ cnt&lt;-cnt+1; cnt` ``
 </code></pre>
 <p>To summarize all this is very confusing and should be avoided.</p>
 <h2 id="knitr">Knitr</h2>
-<h3 id="extraction-of-r-code"><strong>Extraction of R code</strong></h3>
+<h3 id="extraction-of-r-code">Extraction of R code</h3>
 <p>There is the useful function in <em>knitr</em> to extract all code chunks from an RMD file and store them in a new R file:</p>
 <pre><code>library(knitr)
 purl(&quot;rmd_file.rmd&quot;, output = &quot;r_code_file.R&quot;, documentation = 2)
 </code></pre>
-<h3 id="knitr-mysteriously-fails"><strong>Knitr mysteriously fails</strong></h3>
+<h3 id="knitr-mysteriously-fails">Knitr mysteriously fails</h3>
 <p>Quite often knitr fails when <em>as.numeric()</em> function is called within a document with a non-convertible text as a data input. It complaints about failed call to stri_*utf8() function for UFT8 conversion. No such error arises when a code is run in interactive mode. The solution is to use function <em>type.convert(x, &hellip;)</em> instead. It allows to supplement a string that will be considered as NA (<em>na.strings</em> argument).</p>
 <h2 id="bookdown-and-blogdown">Bookdown and blogdown</h2>
 <h3 id="bibliography">Bibliography</h3>
-<p>The packages allow for separation a bibliography description from a main text. It supports bibliography lists in <a href="https://www.bibtex.com/g/bibtex-format/">BIB-format</a> and formatting of references with (CSL-styles)[<a href="https://citationstyles.org/">https://citationstyles.org/</a>].</p>
+<p>The packages allow for separation a bibliography description from a main text. They support bibliography lists in <a href="https://www.bibtex.com/g/bibtex-format/">BIB-format</a> and formatting of references with (CSL-styles)[<a href="https://citationstyles.org/">https://citationstyles.org/</a>].</p>
 <p>YAML-header then may be expanded with:</p>
 <pre><code>bibliography: bibliography_filename.bib 
 link-citations: true
@@ -289,7 +300,7 @@ csl: bibliography_style_filename.csl
 <p>Then it is possible to place references in a text like <code>@refenence1</code>, <code>[@refenence1]</code>, <code>[- @refenence1]</code>, etc.</p>
 <p>There are thousands of free CSL-styles in the <a href="https://github.com/citation-style-language/styles">GitHubrepository</a>. There is the search interface for looking them up <a href="https://csl.mendeley.com/about/">list</a>.<br>
 For blog publications I prefer style &ldquo;journal-of-web-semantics.csl&rdquo;.</p>
-<h3 id="extraction-of-pictures"><strong>Extraction of pictures</strong></h3>
+<h3 id="extraction-of-pictures">Extraction of pictures</h3>
 <p>If you are not aiming to publish to RPubs but still going to publish in HTML you may consider:<br>
 * To install and use <em>bookdown</em> and <em>blogdown</em> packages;<br>
 * To set the options in YAML header to extract pictures and an interim markdown file:</p>
