@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Blog with R and Hugo">
 <meta itemprop="description" content="Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. I tried to use Hugo for my blog and here is the log of this attempt with solutions to problems I encountered."><meta itemprop="datePublished" content="2021-03-19T20:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2021-03-19T20:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1822">
+<meta itemprop="wordCount" content="1926">
 <meta itemprop="keywords" content="R,RStudio,Tools,Howto," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Blog with R and Hugo"/>
 <meta name="twitter:description" content="Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. I tried to use Hugo for my blog and here is the log of this attempt with solutions to problems I encountered."/>
@@ -206,6 +206,7 @@
             <li><a href="#mathjax">MathJax</a></li>
             <li><a href="#comments">Comments</a></li>
             <li><a href="#google-analytics">Google analytics</a></li>
+            <li><a href="#rss">RSS</a></li>
             <li><a href="#multilingual-sites">Multilingual sites</a></li>
             <li><a href="#code-syntax-highlighting">Code syntax highlighting</a></li>
             <li><a href="#customization-with-shortcodes">Customization with shortcodes</a></li>
@@ -246,25 +247,25 @@
 <thead>
 <tr>
 <th style="text-align:left">File/Folder</th>
-<th style="text-align:left">Description</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left">config.yaml</td>
-<td style="text-align:left">Global site parameters (Title, author name, baseURL, etc. will be here).</td>
+<td>Global site parameters (Title, author name, baseURL, etc. will be here).</td>
 </tr>
 <tr>
 <td style="text-align:left">contents</td>
-<td style="text-align:left">Folder with source code for posts.</td>
+<td>Folder with source code for posts.</td>
 </tr>
 <tr>
 <td style="text-align:left">themes</td>
-<td style="text-align:left">The theme layout will be here.</td>
+<td>The theme layout will be here.</td>
 </tr>
 <tr>
 <td style="text-align:left">public</td>
-<td style="text-align:left">The finally generated content for Internet hosting will be here.</td>
+<td>The finally generated content for Internet hosting will be here.</td>
 </tr>
 </tbody>
 </table>
@@ -311,9 +312,12 @@ disqusShortname: &lt;yourdiscussshortname&gt;
 </code></pre>
 <p>More information about comments setup is <a href="https://gohugo.io/content-management/comments/">here</a></p>
 <h3 id="google-analytics">Google analytics</h3>
-<p>To allow for Google Analytics supply your Google Analytics tracking ID into the sites&rsquo;s options file:</p>
-<pre><code>googleAnalytics: &lt;Google Analytics ID&gt;
+<p>By default to turn Google Analytics on in Hugo it is sufficient to supply your Google Analytics tracking ID into the sites&rsquo;s options file:</p>
+<pre><code>googleAnalytics: &lt;Google Analytics ID&gt;.
 </code></pre>
+<p>But there is a &lsquo;but&rsquo;. This works only for the previous version of GA so called &ldquo;Universal Analytics&rdquo; and does not work with the latest version &ldquo;Google Analytics 4&rdquo;. However, right on the <em>data stream</em> configuration page Google provides a tracking script that can be included in your pages. I put it into the &ldquo;footer&rdquo; partial of the theme, to be sure it is to be executed on every page of the site.</p>
+<h3 id="rss">RSS</h3>
+<p>RSS feed is built it. In the theme <em>Evan</em> a user can get an RSS link from the footer of any page.</p>
 <h3 id="multilingual-sites">Multilingual sites</h3>
 <p>There are two ways to make <a href="https://gohugo.io/content-management/multilingual/">multilingual content</a>:</p>
 <p>1. By using <code>.en</code> <code>.ru</code> etc. suffixes in posts filenames, eg. <code>index.ru.md</code>.<br>
