@@ -34,8 +34,7 @@ Libraries 1. We will need special package XML2 to load data in the XLM formats, 
       <pubDate>Fri, 19 Mar 2021 20:00:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/post/2021-03-19-blog_with-hugo/</guid>
-      <description>Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. This is the way I decided to go. Below are some solutions to a problems I encountered.
-Basic local setup To create a local copy of the future blog:</description>
+      <description>Hugo is the great tool to build static web sites, i.e. sites with no backend database, just a plain HTML that is generated from a markup code. Such the site can be hosted on multiple platforms including Amazon and GitHub. The blog can be managed directly from RStudio. I tried to use Hugo for my blog and here is the log of this attempt with solutions to problems I encountered.</description>
     </item>
     
     <item>
