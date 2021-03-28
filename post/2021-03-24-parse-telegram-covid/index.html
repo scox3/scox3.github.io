@@ -52,7 +52,7 @@ The first step is to download Telegram chat stream. That can be easily done with
 <meta itemprop="description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
 The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i."><meta itemprop="datePublished" content="2024-03-24T10:10:00&#43;00:00" />
 <meta itemprop="dateModified" content="2024-03-24T10:10:00&#43;00:00" />
-<meta itemprop="wordCount" content="1166">
+<meta itemprop="wordCount" content="1184">
 <meta itemprop="keywords" content="R,RStudio,COVID19,XML,Tools,Howto,Packages," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Dataset compilation: Telegram and HTML parsing for COVID-19 epidemic data"/>
 <meta name="twitter:description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
@@ -389,14 +389,17 @@ The first step is to download Telegram chat stream. That can be easily done with
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Diagnosed&#34;</span><span class="p">))</span><span class="o">+</span>
   <span class="nf">geom_path</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">new_hosp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Hospitilized&#34;</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
-  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: Number of hospitalized and diagnosed patiens &#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: Number of newly hospitalized and diagnosed patiens&#34;</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Date&#34;</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span><span class="o">+</span>
-  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Number of patients&#34;</span><span class="p">)</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Number of patients&#34;</span><span class="p">)</span><span class="o">+</span> 
+  <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">scale_x_date</span><span class="p">(</span><span class="n">date_labels</span> <span class="o">=</span> <span class="s">&#34;%d%-%m-%Y&#34;</span><span class="p">)</span>
 </code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<p>No indication for periodicity in the auto correlation function.</p>
+<p>No indication for periodicity in the auto correlation function (same is in logs).</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggAcf</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">new_diag</span><span class="p">)</span><span class="o">+</span>
-  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;MSK Covid-19: ACF of the new cases number time series&#34;</span><span class="p">)</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;MSK Covid-19: ACF of the time series the number of new cases&#34;</span><span class="p">)</span><span class="o">+</span> 
+  <span class="nf">theme_bw</span><span class="p">()</span>
 </code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>No clear indication for a time lag between the two series. However cross correlation function is more biases towards negative lags as it should be: diagnostic sightly precedes hospitalizations.</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">ccf1</span> <span class="o">&lt;-</span> <span class="nf">ccf</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">dt.data</span><span class="o">$</span><span class="n">new_hosp</span><span class="p">,</span> 
@@ -407,7 +410,8 @@ The first step is to download Telegram chat stream. That can be easily done with
 <span class="nf">ggplot</span><span class="p">(</span><span class="nf">data.frame</span><span class="p">(</span><span class="n">ccf</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">acf</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">lag</span><span class="p">),</span> <span class="nf">aes</span><span class="p">(</span><span class="n">lag</span><span class="p">,</span> <span class="n">ccf</span><span class="p">))</span><span class="o">+</span>
   <span class="nf">geom_path</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: CCF new cases number ~ new hospitalizations number&#34;</span><span class="p">)</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: CCF new cases number ~ new hospitalizations number&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">theme_bw</span><span class="p">()</span>
 </code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>The ratio of the number of hospitalizations to the number of new cases grows with time. More and more sick people skip official medicine entirely.</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Build regression tree for stepwise approximation</span>
@@ -419,10 +423,13 @@ The first step is to download Telegram chat stream. That can be easily done with
 <span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_hosp</span><span class="o">/</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Data&#34;</span><span class="p">))</span><span class="o">+</span>
   <span class="nf">geom_path</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">geom_smooth</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#34;Lowess&#34;</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
-  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: Ratio of the number of newly hospitalized patiens to\n the number of new registered cases&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: Ratio of the number of new hospitalizations to\n the number of new registered (diagnosed) cases&#34;</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;Date&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Ratio&#34;</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">hosp.rat.tree</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Reg. tree&#34;</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
-  <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span>
+  <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">+</span> 
+  <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">scale_x_date</span><span class="p">(</span><span class="n">date_labels</span> <span class="o">=</span> <span class="s">&#34;%d%-%m-%Y&#34;</span><span class="p">)</span>
 </code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 
     </div>
