@@ -52,7 +52,7 @@ The first step is to download Telegram chat stream. That can be easily done with
 <meta itemprop="description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
 The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i."><meta itemprop="datePublished" content="2024-03-24T10:10:00&#43;00:00" />
 <meta itemprop="dateModified" content="2024-03-24T10:10:00&#43;00:00" />
-<meta itemprop="wordCount" content="1184">
+<meta itemprop="wordCount" content="1274">
 <meta itemprop="keywords" content="R,RStudio,COVID19,XML,Tools,Howto,Packages," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Dataset compilation: Telegram and HTML parsing for COVID-19 epidemic data"/>
 <meta name="twitter:description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
@@ -431,6 +431,43 @@ The first step is to download Telegram chat stream. That can be easily done with
   <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
   <span class="nf">scale_x_date</span><span class="p">(</span><span class="n">date_labels</span> <span class="o">=</span> <span class="s">&#34;%d%-%m-%Y&#34;</span><span class="p">)</span>
 </code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Let&rsquo;s check the ratios by direct calculations:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">display_table</span><span class="o">&lt;-</span><span class="nf">function</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">if</span><span class="p">(</span> <span class="nf">isTRUE</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#39;knitr.in.progress&#39;</span><span class="p">))</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">knitr</span><span class="o">::</span><span class="nf">kable</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> 
+                 <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="n">ndigits</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#34;html&#34;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s">&#34;c&#34;</span><span class="p">)</span>
+  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+    <span class="n">ndg</span> <span class="o">&lt;-</span> <span class="nf">getOption</span><span class="p">(</span><span class="s">&#34;digits&#34;</span><span class="p">)</span>
+    <span class="nf">options</span><span class="p">(</span><span class="n">digits</span> <span class="o">=</span> <span class="n">ndigits</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="n">ndigits</span><span class="p">)</span>
+    <span class="nf">options</span><span class="p">(</span><span class="n">digits</span> <span class="o">=</span> <span class="n">ndg</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>   
+
+<span class="n">dt.average.hz.ratio</span> <span class="o">&lt;-</span> <span class="nf">data.table</span><span class="p">(</span> <span class="n">`Date`</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Before 2020-12-31&#34;</span><span class="p">,</span> <span class="s">&#34;After 2021-02-01&#34;</span><span class="p">),</span>
+                                <span class="n">`Ratio`</span><span class="o">=</span> 
+                                  <span class="nf">c</span><span class="p">(</span><span class="n">dt.data[</span> <span class="n">date</span> <span class="o">&lt;=</span> <span class="nf">as.Date</span><span class="p">(</span><span class="s">&#34;2020-12-31&#34;</span><span class="p">),</span> <span class="nf">sum</span><span class="p">(</span><span class="n">new_hosp</span><span class="p">)</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">new_diag</span><span class="p">)</span><span class="n">]</span><span class="p">,</span> 
+                                  <span class="n">dt.data[</span> <span class="n">date</span> <span class="o">&gt;</span> <span class="nf">as.Date</span><span class="p">(</span><span class="s">&#34;2021-02-01&#34;</span><span class="p">),</span> <span class="nf">sum</span><span class="p">(</span><span class="n">new_hosp</span><span class="p">)</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">new_diag</span><span class="p">)</span><span class="n">]</span><span class="p">))</span>
+<span class="nf">display_table</span><span class="p">(</span><span class="n">dt.average.hz.ratio</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">&#34;Ratio of the number of hospitalizations to the number of cases&#34;</span><span class="p">)</span>
+</code></pre></div><table>
+<caption>(\#tab:unnamed-chunk-19)Ratio of the number of hospitalizations to the number of cases</caption>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Date </th>
+   <th style="text-align:center;"> Ratio </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> Before 2020-12-31 </td>
+   <td style="text-align:center;"> 0.25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> After 2021-02-01 </td>
+   <td style="text-align:center;"> 0.45 </td>
+  </tr>
+</tbody>
+</table>
 
     </div>
 

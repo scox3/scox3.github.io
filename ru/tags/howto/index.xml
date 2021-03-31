@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Mon, 22 Mar 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/howto/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/howto/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива?</title>
+      <link>https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/</guid>
+      <description>Постановка задачи В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП.</description>
+    </item>
+    
     <item>
       <title>Анализ спортивных треков в R</title>
       <link>https://scox3.github.io/ru/post/2021-03-22-gps-velo-ru/</link>

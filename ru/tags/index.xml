@@ -7,7 +7,70 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Mon, 22 Mar 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>COVID19</title>
+      <link>https://scox3.github.io/ru/tags/covid19/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/covid19/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Howto</title>
+      <link>https://scox3.github.io/ru/tags/howto/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/howto/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Packages</title>
+      <link>https://scox3.github.io/ru/tags/packages/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/packages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://scox3.github.io/ru/tags/r/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RStudio</title>
+      <link>https://scox3.github.io/ru/tags/rstudio/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/rstudio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tools</title>
+      <link>https://scox3.github.io/ru/tags/tools/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/tools/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>XML</title>
+      <link>https://scox3.github.io/ru/tags/xml/</link>
+      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/xml/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>GoogleMaps</title>
       <link>https://scox3.github.io/ru/tags/googlemaps/</link>
@@ -27,42 +90,6 @@
     </item>
     
     <item>
-      <title>Howto</title>
-      <link>https://scox3.github.io/ru/tags/howto/</link>
-      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/tags/howto/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Packages</title>
-      <link>https://scox3.github.io/ru/tags/packages/</link>
-      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/tags/packages/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>https://scox3.github.io/ru/tags/r/</link>
-      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>RStudio</title>
-      <link>https://scox3.github.io/ru/tags/rstudio/</link>
-      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/tags/rstudio/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Sport</title>
       <link>https://scox3.github.io/ru/tags/sport/</link>
       <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
@@ -77,15 +104,6 @@
       <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/strava/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tools</title>
-      <link>https://scox3.github.io/ru/tags/tools/</link>
-      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/tags/tools/</guid>
       <description></description>
     </item>
     

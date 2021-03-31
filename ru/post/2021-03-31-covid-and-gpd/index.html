@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива? - Datascience, tools and datasets</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Vladislav Borkus" /><meta name="description" content="Постановка задачи В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП." /><meta name="keywords" content="R, Data science, Econometrics" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.3a5f39feb4252758bd7abbc1b9b9ca935d821cc19af111e1a22dcae852692ee0.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива?" />
+<meta property="og:description" content="Постановка задачи В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2024-03-31T10:10:00&#43;00:00" />
+<meta property="article:modified_time" content="2024-03-31T10:10:00&#43;00:00" /><meta property="og:site_name" content="Datascience, tools and datasets" />
+
+<meta itemprop="name" content="Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива?">
+<meta itemprop="description" content="Постановка задачи В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП."><meta itemprop="datePublished" content="2024-03-31T10:10:00&#43;00:00" />
+<meta itemprop="dateModified" content="2024-03-31T10:10:00&#43;00:00" />
+<meta itemprop="wordCount" content="998">
+<meta itemprop="keywords" content="R,RStudio,COVID19,XML,Tools,Howto,Packages," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива?"/>
+<meta name="twitter:description" content="Постановка задачи В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/ru/" class="logo">Data science, tools and datasets</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/ru/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/ru/" class="logo">Data science, tools and datasets</a>
+</div>
+
+
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/ru/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива?</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2024-03-31 </span>
+        <div class="post-category">
+            <a href="/ru/categories/r/"> R </a>
+            <a href="/ru/categories/rstudio/"> RStudio </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Содержание</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#постановка-задачи">Постановка задачи</a></li>
+            <li><a href="#данные">Данные</a></li>
+            <li><a href="#корреляции">Корреляции</a></li>
+            <li><a href="#выводы">Выводы</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="постановка-задачи">Постановка задачи</h3>
+<p>В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП.</p>
+<h3 id="данные">Данные</h3>
+<p>Нужные данные можно легко получить: .</p>
+<ul>
+<li>
+<p>Данные по показателям ковида доступны с сайта <a href="https://www.worldometers.info/coronavirus/">Worldometes</a> до 31 марта 2021;</p>
+</li>
+<li>
+<p>Данные по изменению ВВП в 2020м доступны с сайта <a href="https://ec.europa.eu/eurostat/databrowser/view/tec00115/default/bar?lang=en">Eurostat</a> для всех стран Европы, кроме Британии, для которой их приходится добавлять руками, беря из других <a href="https://www.theguardian.com/business/2021/feb/12/uk-avoided-double-dip-recession-despite-covid-slump-in-2020-ons-gdp">источников</a>.</p>
+</li>
+</ul>
+<p>Отмечу очевидный недостаток - эти данные за несколько разный временной период: показатели болезни берутся с начала прошлого года вплоть до марта этого года, а ВВП - за весь прошлый год. Однако, эпидемия во всех странах продолжается и меры противодействия ей ничуть не изменились, стало быть можно ожидать, что и тенденция изменения ВВП в 1 кв. 2021 сохранилась. Например, основные экономические потери были из-за локдаунов, которые продолжались и в начале нынешнего года. Иначе говоря, такое вольное обращение с данными может несколько изменить коэффециент корреляции, но не должно привести к качественному искажению самой зависимости.</p>
+<p>Итак, 1) считываем данные с Worldometer.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># Data manipulation packages</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">readr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">readxl</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">purrr</span><span class="p">)</span>
+
+<span class="c1">#Visaulization packages</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggrepel</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggfortify</span><span class="p">)</span>
+
+
+<span class="c1">#Web scraping packages</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">XML</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">RCurl</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">read_worldometer_world_covid_today</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">#The only reliable way</span>
+  <span class="n">doc</span> <span class="o">&lt;-</span> <span class="nf">getURL</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+  
+  <span class="n">doc_tables</span> <span class="o">&lt;-</span> <span class="nf">readHTMLTable</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="c1">#, elFun = tryAsInteger)</span>
+  
+  <span class="n">colnames1</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span> <span class="s">&#34;TotalCases&#34;</span><span class="p">,</span> <span class="s">&#34;NewCases&#34;</span><span class="p">,</span> <span class="s">&#34;TotalDeaths&#34;</span><span class="p">,</span>
+                  <span class="s">&#34;NewDeaths&#34;</span><span class="p">,</span>  <span class="s">&#34;TotalRecovered&#34;</span><span class="p">,</span> <span class="s">&#34;NewRecovered&#34;</span><span class="p">,</span> <span class="s">&#34;ActiveCases&#34;</span><span class="p">,</span> <span class="s">&#34;Serious.Critical&#34;</span><span class="p">,</span>  
+                  <span class="s">&#34;Tot.Cases.1M.pop&#34;</span><span class="p">,</span> <span class="s">&#34;Deaths.1M.pop&#34;</span><span class="p">,</span> <span class="s">&#34;TotalTests&#34;</span><span class="p">,</span> <span class="s">&#34;Tests.1M.pop&#34;</span><span class="p">,</span> <span class="s">&#34;Population&#34;</span><span class="p">,</span>        
+                  <span class="s">&#34;1.Caseevery.X.ppl&#34;</span><span class="p">,</span> <span class="s">&#34;1.Deathevery.X.ppl&#34;</span><span class="p">,</span> <span class="s">&#34;1.Testevery.X.ppl&#34;</span> <span class="p">)</span> 
+  
+  <span class="n">col_data_to_numeric</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">r</span> <span class="o">&lt;-</span> <span class="n">x</span><span class="o">%&gt;%</span> <span class="nf">str_replace_all</span><span class="p">(</span><span class="s">&#34;[^[0-9\\-\\.]]&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">%&gt;%</span> 
+      <span class="nf">as.numeric</span><span class="p">()</span>
+<span class="c1">#      type.convert(na.strings=&#34;&#34;, dec = &#34;.&#34;)</span>
+    <span class="nf">return</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+  <span class="p">}</span> 
+  
+  
+  <span class="n">dt1</span> <span class="o">&lt;-</span> <span class="nf">data.table</span><span class="p">(</span> <span class="n">doc_tables</span><span class="o">$</span><span class="n">main_table_countries_today</span> <span class="p">)</span>
+  <span class="nf">names</span><span class="p">(</span><span class="n">dt1</span><span class="p">)</span> <span class="o">&lt;-</span>  <span class="nf">sapply</span><span class="p">(</span>  <span class="nf">names</span><span class="p">(</span><span class="n">dt1</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> 
+      <span class="nf">str_replace_all</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&#34;[^[:alnum:]]&#34;</span><span class="p">,</span> <span class="s">&#34;.&#34;</span><span class="p">)},</span> <span class="n">USE.NAMES</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+
+  <span class="n">dt1[</span> <span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="n">colnames1</span><span class="p">)</span> <span class="o">:=</span> <span class="p">{</span> <span class="n">colnames1</span> <span class="o">%&gt;%</span> <span class="nf">map</span><span class="p">(</span> <span class="o">~</span> <span class="nf">col_data_to_numeric</span><span class="p">(</span><span class="nf">get</span><span class="p">(</span><span class="n">.x</span><span class="p">)))</span> <span class="p">}</span> <span class="n">]</span>
+  
+  <span class="nf">return</span><span class="p">(</span><span class="n">dt1</span><span class="p">)</span>  
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">## Set to TRUE to parse data from Web, FALSE to load from disk</span>
+<span class="n">from_cache</span> <span class="o">&lt;-</span> <span class="kc">TRUE</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r">  <span class="nf">if</span><span class="p">(</span><span class="o">!</span><span class="n">from_cache</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="c1">#Read latest data</span>
+    <span class="n">dt.covid.world</span> <span class="o">&lt;-</span> <span class="nf">read_worldometer_world_covid_today</span><span class="p">(</span> <span class="s">&#34;https://www.worldometers.info/coronavirus/&#34;</span><span class="p">)</span>
+    
+    <span class="nf">save</span><span class="p">(</span><span class="n">dt.covid.world</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="nf">Sys.Date</span><span class="p">(),</span> <span class="s">&#34;_dt.covid.world.RData&#34;</span><span class="p">))</span>
+    <span class="nf">write.csv</span><span class="p">(</span><span class="n">dt.covid.world</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="nf">Sys.Date</span><span class="p">(),</span> <span class="s">&#34;_dt.covid.world.csv&#34;</span><span class="p">))</span>
+  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+    <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s">&#34;data/2021-03-31_dt.covid.world.RData&#34;</span><span class="p">)</span>
+  <span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">dt.covid.europe</span> <span class="o">&lt;-</span><span class="n">dt.covid.world[</span> <span class="n">Continent</span> <span class="o">==</span> <span class="s">&#34;Europe&#34;</span> <span class="o">&amp;</span> <span class="n">Country.Other</span> <span class="o">!=</span> <span class="s">&#34;Europe&#34;</span><span class="n">]</span>
+<span class="n">dt.covid.europe[</span> <span class="n">Country.Other</span> <span class="o">==</span> <span class="s">&#34;UK&#34;</span><span class="p">,</span> <span class="n">Country.Other</span> <span class="o">:=</span> <span class="s">&#34;United Kingdom&#34;</span><span class="n">]</span>	
+</code></pre></div><ol start="2">
+<li>Загружаем данные Eurostar</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">dt.gdp.change.xls</span> <span class="o">&lt;-</span> <span class="nf">as.data.table</span><span class="p">(</span> <span class="nf">read_excel</span><span class="p">(</span><span class="s">&#34;data/TEC001151617218018276.xlsx&#34;</span><span class="p">,</span>
+<span class="n">sheet</span> <span class="o">=</span> <span class="s">&#34;Sheet 1&#34;</span><span class="p">,</span> <span class="n">skip</span> <span class="o">=</span> <span class="m">7</span><span class="p">))</span>
+
+<span class="n">dt.gdp.change</span> <span class="o">&lt;-</span> <span class="n">dt.gdp.change.xls[</span> <span class="p">,</span> <span class="n">.(</span> <span class="n">`TIME`</span><span class="p">,</span> <span class="n">`2020`</span><span class="p">)</span><span class="n">]</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">dt.gdp.change</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;Country&#34;</span><span class="p">,</span> <span class="s">&#34;GDP.Change.2020&#34;</span><span class="p">)</span>
+<span class="n">dt.gdp.change</span> <span class="o">&lt;-</span> <span class="n">dt.gdp.change[</span> <span class="o">!</span><span class="nf">str_detect</span><span class="p">(</span> <span class="n">Country</span><span class="p">,</span> <span class="s">&#34;Euro&#34;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">!</span><span class="nf">str_detect</span><span class="p">(</span> <span class="n">Country</span><span class="p">,</span> <span class="s">&#34;GEO&#34;</span><span class="p">)</span><span class="n">]</span>
+<span class="n">dt.gdp.change[</span> <span class="p">,</span> <span class="n">GDP.Change.2020</span> <span class="o">:=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">GDP.Change.2020</span><span class="p">)</span> <span class="n">]</span>
+
+<span class="c1">#Add UK</span>
+<span class="n">dt.gdp.change[</span> <span class="n">Country</span> <span class="o">==</span> <span class="s">&#34;United Kingdom&#34;</span><span class="p">,</span>  <span class="n">GDP.Change.2020</span> <span class="o">:=</span> <span class="m">-9.9</span><span class="n">]</span>
+<span class="n">dt.gdp.change[</span> <span class="nf">str_detect</span><span class="p">(</span><span class="n">Country</span><span class="p">,</span> <span class="s">&#34;Germany&#34;</span><span class="p">),</span>  <span class="n">Country</span> <span class="o">:=</span> <span class="s">&#34;Germany&#34;</span><span class="n">]</span>
+</code></pre></div><ol start="3">
+<li>Объединяем их</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">dt.europe.dat</span> <span class="o">&lt;-</span> <span class="nf">merge</span><span class="p">(</span> <span class="n">dt.covid.europe</span><span class="p">,</span> <span class="n">dt.gdp.change</span><span class="p">,</span> <span class="n">by.x</span><span class="o">=</span><span class="s">&#34;Country.Other&#34;</span><span class="p">,</span> <span class="n">by.y</span><span class="o">=</span><span class="s">&#34;Country&#34;</span><span class="p">)</span>
+</code></pre></div><h3 id="корреляции">Корреляции</h3>
+<p>Наиболее парадоксальный результат этого упражнения состоит в том, что корреляция противоположна ожидаемой - чем больше обрушение ВВП, тем больше жизней оказывается потеряно. Это показывают разные методы корреляции, как чувствительные к выбросам в данных, так и не чувствительные к ним.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">dt.cor</span> <span class="o">&lt;-</span>  <span class="nf">na.omit</span><span class="p">(</span> <span class="n">dt.europe.dat[</span> <span class="p">,</span> <span class="n">.(Deaths.1M.pop</span><span class="p">,</span> <span class="n">GDP.Change.2020</span><span class="p">)</span><span class="n">]</span> <span class="p">)</span>
+<span class="nf">cor</span><span class="p">(</span><span class="n">dt.cor</span><span class="o">$</span><span class="n">Deaths.1M.pop</span><span class="p">,</span> <span class="n">dt.cor</span><span class="o">$</span><span class="n">GDP.Change.2020</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] -0.3802152
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">cor</span><span class="p">(</span><span class="n">dt.cor</span><span class="o">$</span><span class="n">Deaths.1M.pop</span><span class="p">,</span> <span class="n">dt.cor</span><span class="o">$</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#34;kendall&#34;</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] -0.2776102
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">cor</span><span class="p">(</span><span class="n">dt.cor</span><span class="o">$</span><span class="n">Deaths.1M.pop</span><span class="p">,</span> <span class="n">dt.cor</span><span class="o">$</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#34;spearman&#34;</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] -0.4162465
+</code></pre></div><p>Вместе с тем, статистическая значимость этой корреляции низкая. Можно сделать лирейную регрессию и убедиться в этом. Но опять же мы получаем отрицательный, хотя и околонулевой коэффициент.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">lm1</span> <span class="o">&lt;-</span> <span class="nf">lm</span><span class="p">(</span> <span class="n">Deaths.1M.pop</span> <span class="o">~</span> <span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dt.europe.dat</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span> <span class="n">lm1</span> <span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## 
+## Call:
+## lm(formula = Deaths.1M.pop ~ GDP.Change.2020, data = dt.europe.dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1306.42  -358.98    58.59   322.08  1147.90 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       894.35     188.92   4.734 4.93e-05 ***
+## GDP.Change.2020   -75.31      33.45  -2.252   0.0318 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 570.8 on 30 degrees of freedom
+##   (4 observations deleted due to missingness)
+## Multiple R-squared:  0.1446,	Adjusted R-squared:  0.116 
+## F-statistic:  5.07 on 1 and 30 DF,  p-value: 0.03182
+</code></pre></div><p>Удивительно, но кроме наличия нескольких точек с высоким рычагом, условия для этой регрессии соблюдаются.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">autoplot</span><span class="p">(</span><span class="n">lm1</span><span class="p">,</span> <span class="n">label.size</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+</code></pre></div><p><img src="covid-toll-vs-gpd-ru_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Так это выглядит на scatter plot.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.europe.dat[GDP.Change.2020</span> <span class="o">&lt;</span><span class="m">0</span> <span class="n">]</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span><span class="n">Deaths.1M.pop</span><span class="p">))</span><span class="o">+</span>
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;GDP change in 2020, %&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;COVID deaths per 1M population&#34;</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span> <span class="s">&#34;GDP growth in 2020 vs. COVID deaths in the selected EU countries&#34;</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## `geom_smooth()` using formula &#39;y ~ x&#39;
+</code></pre></div><p><img src="covid-toll-vs-gpd-ru_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Та же картинка с подписанными странами.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.europe.dat</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span><span class="n">Deaths.1M.pop</span><span class="p">))</span><span class="o">+</span>
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;blue&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&#34;lm&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">geom_text_repel</span><span class="p">(</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span><span class="n">Deaths.1M.pop</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">Country.Other</span><span class="p">),</span> <span class="n">max.overlaps</span> <span class="o">=</span> <span class="kc">Inf</span><span class="p">,</span> <span class="n">min.segment.length</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;GDP change in 2020, %&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;Deaths per 1M population&#34;</span><span class="p">)</span> <span class="o">+</span> 
+  <span class="nf">ggtitle</span><span class="p">(</span> <span class="s">&#34;GDP growth in 2020 vs. COVID deaths in the selected EU countries&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="covid-toll-vs-gpd-ru_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Стоит также проверить для логарифмов.</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">summary</span><span class="p">(</span> <span class="nf">lm</span><span class="p">(</span> <span class="nf">log</span><span class="p">(</span><span class="n">Deaths.1M.pop</span><span class="p">)</span> <span class="o">~</span> <span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dt.europe.dat</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## 
+## Call:
+## lm(formula = log(Deaths.1M.pop) ~ GDP.Change.2020, data = dt.europe.dat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.6207 -0.1481  0.2350  0.5312  0.8227 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      6.55842    0.26223  25.010   &lt;2e-16 ***
+## GDP.Change.2020 -0.07650    0.04643  -1.648     0.11    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7923 on 30 degrees of freedom
+##   (4 observations deleted due to missingness)
+## Multiple R-squared:  0.08299,	Adjusted R-squared:  0.05242 
+## F-statistic: 2.715 on 1 and 30 DF,  p-value: 0.1099
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">cor</span><span class="p">(</span><span class="nf">log</span><span class="p">(</span><span class="n">dt.cor</span><span class="o">$</span><span class="n">Deaths.1M.pop</span><span class="p">),</span> <span class="n">dt.cor</span><span class="o">$</span><span class="n">GDP.Change.2020</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] -0.2880722
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">cor</span><span class="p">(</span><span class="nf">log</span><span class="p">(</span><span class="n">dt.cor</span><span class="o">$</span><span class="n">Deaths.1M.pop</span><span class="p">),</span> <span class="n">dt.cor</span><span class="o">$</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#34;kendall&#34;</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] -0.2776102
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">cor</span><span class="p">(</span><span class="nf">log</span><span class="p">(</span><span class="n">dt.cor</span><span class="o">$</span><span class="n">Deaths.1M.pop</span><span class="p">),</span> <span class="n">dt.cor</span><span class="o">$</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#34;spearman&#34;</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] -0.4162465
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.europe.dat</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">GDP.Change.2020</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span><span class="nf">log</span><span class="p">(</span><span class="n">Deaths.1M.pop</span><span class="p">)))</span><span class="o">+</span>
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">xlab</span><span class="p">(</span><span class="s">&#34;GDP change in 2020, %&#34;</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&#34;log(COVID deaths per 1M population)&#34;</span><span class="p">)</span> <span class="o">+</span> <span class="nf">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span><span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span> <span class="s">&#34;GDP growth in 2020 vs. COVID deaths in selected EU countries&#34;</span><span class="p">)</span>
+</code></pre></div><p><img src="covid-toll-vs-gpd-ru_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<h3 id="выводы">Выводы</h3>
+<p>Основной вывод, который можно сделать из этого беглого анализа состоит в том, что опровергнуть нулевую гипотезу о том, что экономические потери сопровождаются сохранением жизней, не получается - недостаточно статистической значимости. Однако свидетельств в ее пользу тоже не наблюдается. Впечатление такое, что несмотря на большие экономические потери стран, были какие-то более мощные факторы, влиявшие на смертность от ковида.</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Автор</span>
+    <span class="item-content">Vladislav Borkus</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">Последнее изменение</span>
+    <span class="item-content">
+        2024-03-31
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">Лицензия</span>
+    <span class="item-content">(C) Vladislav Borkus</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/ru/tags/r/">R</a>
+          <a href="/ru/tags/rstudio/">RStudio</a>
+          <a href="/ru/tags/covid19/">COVID19</a>
+          <a href="/ru/tags/xml/">XML</a>
+          <a href="/ru/tags/tools/">Tools</a>
+          <a href="/ru/tags/howto/">Howto</a>
+          <a href="/ru/tags/packages/">Packages</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/ru/post/2021-03-22-gps-velo-ru/">
+            <span class="next-text nav-default">Анализ спортивных треков в R</span>
+            <span class="next-text nav-mobile">Следующий</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'vladislavborkus';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="scox3@yandex.ru" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.facebook.com/vlad.borkus/" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://scox3.github.io" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://vladborkus.blogger.com" class="iconfont icon-google" title="google"></a>
+      <a href="https://github.com/scox3" class="iconfont icon-github" title="github"></a>
+  <a href="https://scox3.github.io/ru/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Создано с помощью <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Тема - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>(c) Vladislav Borkus</span>
+  </span>
+</div>
+
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSCWFD9LM9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MSCWFD9LM9');
+</script>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

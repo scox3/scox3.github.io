@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on Datascience, tools and datasets</title>
-    <link>https://scox3.github.io/ru/tags/r/</link>
-    <description>Recent content in R on Datascience, tools and datasets</description>
+    <title>COVID19 on Datascience, tools and datasets</title>
+    <link>https://scox3.github.io/ru/tags/covid19/</link>
+    <description>Recent content in COVID19 on Datascience, tools and datasets</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Sun, 31 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/covid19/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Quick look at data: спасение жизней в эпидемию vs. разрушение экономики - верна ли альтернатива?</title>
       <link>https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/</link>
@@ -15,16 +15,6 @@
       
       <guid>https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/</guid>
       <description>Постановка задачи В борьбе с ковидом страны несут огромные экономические потери, поэтому разумно задаться вопросом насколько все это делается эффективно, т. е. как транслируются всевозможные локдауны в спасение жизней. Никакого прямого эксперимента нам недоступно, но можно сделать сравнительный анализ между странами. Логично предположить, что те страны, которые вводили самые жесткие меры должны нести наибольшие экономические потери, но одновременно и спасти максимальное число жизней. Нулевая гипотеза таким образом состоит в том, что значение смертности от ковид в пересчете на миллион населения должно положительно коррелировать с изменением ВВП.</description>
-    </item>
-    
-    <item>
-      <title>Анализ спортивных треков в R</title>
-      <link>https://scox3.github.io/ru/post/2021-03-22-gps-velo-ru/</link>
-      <pubDate>Mon, 22 Mar 2021 10:00:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/post/2021-03-22-gps-velo-ru/</guid>
-      <description>Я люблю бегать и кататься на велосипеде, и часто возникает желание подумать как проходила та или иная тренировка. Обычно я записываю GPS-трек и просматриваю его потом в сервисах Endomondo, Strava, в которых имеются довольно развитые средства анализа, но раз уж я владею R, то интересно и исследовать треки в этой системе. Ниже я опишу по шагам как это делается.
-Библиотеки 1. Помимо стандартных библиотек для работы с данными и графикой, потребуются библиотеки для загрузки данных в формате XML, в котором сохраняют треки все спортивные устройства и программы вроде Endomondo и Strava, пакеты для расчета расстояний на базе геоданных (geosphere) и рисования при помощи карт Google Map.</description>
     </item>
     
   </channel>
