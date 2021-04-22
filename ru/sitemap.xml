@@ -8,99 +8,197 @@
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/categories/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/tags/bakken/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/tags/covid19/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/post/2021-04-15-bakken08-short-summary-ru/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://scox3.github.io/ru/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/tags/howto/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/tags/oil/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/tags/packages/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/categories/oil-market/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://scox3.github.io/ru/post/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://scox3.github.io/ru/tags/r/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/categories/r/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/tags/research/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/tags/rstudio/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/categories/research/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://scox3.github.io/ru/categories/rstudio/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <loc>https://scox3.github.io/ru/tags/shaleoil/</loc>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://scox3.github.io/ru/tags/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <lastmod>2021-04-15T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-11-bakken07-project-portfolios-cashflow-ru/</loc>
+    <lastmod>2021-04-11T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-10-bakken06-project-portfolios-npv-ru/</loc>
+    <lastmod>2021-04-10T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-09-bakken05-wells-npv-ru/</loc>
+    <lastmod>2021-04-09T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-08-bakken04-revenue-structure-ru/</loc>
+    <lastmod>2021-04-08T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-07-bakken03-refrac-analysis-ru/</loc>
+    <lastmod>2021-04-07T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-06-bakken02-cost-structure-ru/</loc>
+    <lastmod>2021-04-06T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-04-05-bakken01-dataset-ru/</loc>
+    <lastmod>2021-04-05T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/covid19/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/howto/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/packages/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/post/2021-03-31-covid-and-gpd/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/r/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/tags/rstudio/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://scox3.github.io/ru/categories/rstudio/</loc>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://scox3.github.io/ru/tags/tools/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://scox3.github.io/ru/tags/xml/</loc>
-    <lastmod>2024-03-31T10:10:00+00:00</lastmod>
+    <lastmod>2021-03-31T10:10:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

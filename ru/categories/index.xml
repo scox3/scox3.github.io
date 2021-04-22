@@ -7,11 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Sun, 31 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Apr 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Oil market</title>
+      <link>https://scox3.github.io/ru/categories/oil-market/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/categories/oil-market/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Research</title>
+      <link>https://scox3.github.io/ru/categories/research/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/categories/research/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>R</title>
       <link>https://scox3.github.io/ru/categories/r/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/categories/r/</guid>
       <description></description>
@@ -20,7 +38,7 @@
     <item>
       <title>RStudio</title>
       <link>https://scox3.github.io/ru/categories/rstudio/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/categories/rstudio/</guid>
       <description></description>

@@ -7,11 +7,56 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Sun, 31 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Apr 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bakken</title>
+      <link>https://scox3.github.io/ru/tags/bakken/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/bakken/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Oil</title>
+      <link>https://scox3.github.io/ru/tags/oil/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/oil/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://scox3.github.io/ru/tags/r/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Research</title>
+      <link>https://scox3.github.io/ru/tags/research/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/research/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Shaleoil</title>
+      <link>https://scox3.github.io/ru/tags/shaleoil/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/tags/shaleoil/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>COVID19</title>
       <link>https://scox3.github.io/ru/tags/covid19/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/covid19/</guid>
       <description></description>
@@ -20,7 +65,7 @@
     <item>
       <title>Howto</title>
       <link>https://scox3.github.io/ru/tags/howto/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/howto/</guid>
       <description></description>
@@ -29,25 +74,16 @@
     <item>
       <title>Packages</title>
       <link>https://scox3.github.io/ru/tags/packages/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/packages/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>R</title>
-      <link>https://scox3.github.io/ru/tags/r/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/ru/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>RStudio</title>
       <link>https://scox3.github.io/ru/tags/rstudio/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/rstudio/</guid>
       <description></description>
@@ -56,7 +92,7 @@
     <item>
       <title>Tools</title>
       <link>https://scox3.github.io/ru/tags/tools/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/tools/</guid>
       <description></description>
@@ -65,7 +101,7 @@
     <item>
       <title>XML</title>
       <link>https://scox3.github.io/ru/tags/xml/</link>
-      <pubDate>Sun, 31 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 31 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/ru/tags/xml/</guid>
       <description></description>

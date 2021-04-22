@@ -1,0 +1,48 @@
+<script src="index.ru_files/header-attrs-2.7/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#выбор-данных-для-анализа">Выбор данных для анализа</a>
+<ul>
+<li><a href="#распределение-npv-в-портфелях">Распределение NPV в портфелях</a></li>
+<li><a href="#npv-портфелей-по-месяцам-завершения-скважин">NPV портфелей по месяцам завершения скважин</a></li>
+<li><a href="#отрасль-в-целом">Отрасль в целом</a></li>
+</ul></li>
+<li><a href="#appendix.-npv-скважин-портфелей.-дополнительные-диаграммы">Appendix. NPV скважин портфелей. Дополнительные диаграммы</a></li>
+</ul>
+</div>
+
+<div id="выбор-данных-для-анализа" class="section level1">
+<h1>Выбор данных для анализа</h1>
+<p>Портфель проектов представляет собой группу проектов, имеющих общее управление и финансирование, т. е. относящихся к какой-то одной компании-владельцу. Управление сразу пулом проектов позволяет уменьшить инвестиционные риски, покрывая убытки по одним проектам доходами по другим. Для портфелей можно уже оценивать такие показатели как долговая нагрузка.</p>
+<p>Так как скважины переходили из рук в руки, то структура портфелей проектов изменялась со временем. Часть скважин продавалась, другие покупались. Так как цены продажи проектов не известны, то неизбежна неопределенность в оценке финансовых показателей. Чтобы ее уменьшить, далее будет принято упрощение, согласно которому скважина приписывается к портфелю по ее первому владельцу. Второе упрощение - рассматривались только портфели, которые менялись несильно, что позволяет соотносить рассчитываемые показатели с реальными показателями бизнесов. Критерием “несильности” будет служить требование, чтобы доля объема нефти, добытой в скважинах, сменивших владельца, к общему объему, добытому скважинами портфеля, не превышала 3%.</p>
+<p>Такие упрощения приводят к тому, что оценки модели будут соотноситься с реальностью только в отношении крупных производителей, которые, однако, дают в сумме около 72 % всей добытой нефти месторождения. Таких компаний оказалось 10.</p>
+<p><img src="bakken06-project-portfolios-npv.ru_files/figure-html/oil-that-changed-portfolio-1.png" width="864" /></p>
+<div id="распределение-npv-в-портфелях" class="section level2">
+<h2>Распределение NPV в портфелях</h2>
+<p>Разбивка скважин по портфелям позволяет выявить, что разные компании по разному угадывали качество будущих скважин. У некоторых из них мало “звезд,” но зато стабильно-удачные вложения. Другие действовали более рискованно - у них большая доля неокупившихся вложений, но зато есть и мегаудачные, покрывающие убытки по десяткам убыточных скважин.</p>
+<p><img src="bakken06-project-portfolios-npv.ru_files/figure-html/portfolio-npv-distr-1.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/portfolio-npv-distr-2.png" width="864" /></p>
+</div>
+<div id="npv-портфелей-по-месяцам-завершения-скважин" class="section level2">
+<h2>NPV портфелей по месяцам завершения скважин</h2>
+<p>Можно также оценить сколько заработали те или иные портфели скважин в зависимости от месяца запуска. Вполне ожидаемо доходы и убытки в портфеле примерно балансируют друг друга, а наиболее убыточным периодом инвестиций оказывается 2015-2016 гг.</p>
+<p><img src="bakken06-project-portfolios-npv.ru_files/figure-html/potrfolio-npv-by-month-of-completion-1.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/potrfolio-npv-by-month-of-completion-2.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/potrfolio-npv-by-month-of-completion-3.png" width="864" /></p>
+</div>
+<div id="отрасль-в-целом" class="section level2">
+<h2>Отрасль в целом</h2>
+<p>Ну и, наконец, можно задаться вопросом о доходности этой отрасли в целом. На диаграмме ниже приведены траектории NPV суммарно по всем скважинам, открытым в какой-то год<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Как видим, в целом достичь положительной доходности могут только инвестиции в отрасль последних пяти лет, но не первых лет “сланцевой революции.”</p>
+<p><img src="bakken06-project-portfolios-npv.ru_files/figure-html/bakken-npv-by-year-of-completion-1.png" width="864" /></p>
+<p>На этом можно завершить с рассмотрением показателей NPV, и далее перейти к моделированию реальных денежных потоков портфелей.</p>
+<hr />
+</div>
+</div>
+<div id="appendix.-npv-скважин-портфелей.-дополнительные-диаграммы" class="section level1">
+<h1>Appendix. NPV скважин портфелей. Дополнительные диаграммы</h1>
+<p><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-1.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-2.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-3.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-4.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-5.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-6.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-7.png" width="864" /><img src="bakken06-project-portfolios-npv.ru_files/figure-html/unnamed-chunk-5-8.png" width="864" /></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Небольшой скачок кривых на 60-м месяце соответствует единовременной выплате бонуса за землю, которая, согласно модели производится каждые пять лет.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

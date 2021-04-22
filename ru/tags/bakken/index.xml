@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bakken on Datascience, tools and datasets</title>
+    <link>https://scox3.github.io/ru/tags/bakken/</link>
+    <description>Recent content in Bakken on Datascience, tools and datasets</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>(c) Vladislav Borkus</copyright>
+    <lastBuildDate>Thu, 15 Apr 2021 10:00:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/ru/tags/bakken/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bakken.08. Короткое резюме</title>
+      <link>https://scox3.github.io/ru/post/2021-04-15-bakken08-short-summary-ru/</link>
+      <pubDate>Thu, 15 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/post/2021-04-15-bakken08-short-summary-ru/</guid>
+      <description>1. Много неудачных инвестиций2. Оптимизация инвестиций в последние пять лет3. Выход на положительный кэш-флоу4. Акцент на дебит в первый год, а не на долгую работу скважины5. Сокращение долга6. Обводнение месторождения и смещение в сторону добычи газа1. Много неудачных инвестицийОтраслью было сделано крайне много неудачных инвестиций. Причем ошибкибыли совершены и в части ожидаемых дебитов и в части ожиданий ценынефти.</description>
+    </item>
+    
+    <item>
+      <title>Bakken.02. Компоненты модели: структура расходов типового проекта</title>
+      <link>https://scox3.github.io/ru/post/2021-04-06-bakken02-cost-structure-ru/</link>
+      <pubDate>Tue, 06 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/post/2021-04-06-bakken02-cost-structure-ru/</guid>
+      <description>Стоимость скважинЛицензионные платежи за минеральные ресурсыБонусы и рентные платежиВычеты для федеральных земель и земель штатаПриобретение участкаНалоги на добычу нефтиНалоги на добычу газаТекущие расходыСтоимость капиталаНалог на прибыльПовторный гидроразрывНиже будут рассмотрены основные компоненты затрат на создание и эксплуатацию сланцевых скважин в Северной Дакоте, заложенные в модель оценки окупаемости проектов.
+Стоимость скважинОсновные первичные затраты приходятся на стоимость скважины.</description>
+    </item>
+    
+    <item>
+      <title>Bakken.01. Датасет и общие характеристики добычи</title>
+      <link>https://scox3.github.io/ru/post/2021-04-05-bakken01-dataset-ru/</link>
+      <pubDate>Mon, 05 Apr 2021 10:00:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/ru/post/2021-04-05-bakken01-dataset-ru/</guid>
+      <description>Исходные данныеОбъемы добычи нефтиХарактеристики добычи нефтиДобыча газаОбводненностьДобыча нефти на американских сланцевых месторождениях развивается уж более десяти лет, и накоплено достаточно информации для проведения пост-фактум анализа рентабельности подобных проектов. При их запуске, по крайней мере в начале “десятых” годов, предполагались довольно высокие цены на нефть, но эти ожидания не оправдались, цена нефти падала до очень низких значений. Так что получилось в итоге?</description>
+    </item>
+    
+  </channel>
+</rss>

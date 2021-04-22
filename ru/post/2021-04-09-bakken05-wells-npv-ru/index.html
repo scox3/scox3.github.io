@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Bakken.05. Распределение окупаемости отдельных скважин - Datascience, tools and datasets</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Vladislav Borkus" /><meta name="description" content="Распределение NPV скважинОговоркиСамая прибыльная скважинаЯ буду оценивать успешности инвестиций с помощью двух критериев:
+NPV (Net present value) для оценки доходности отдельных скважин. В данном случае NPV будет показывать насколько достигнуты цели по доходности, которые ставились при запуске проектов. Будет использована ставка дисконтирования чистого денежного потока, т.е. дохода после вычета всех расходов, в 5% в год, примерно соответствующая ставке по облигациям. Для каждой скважины будет использован весь период наблюдений (т." /><meta name="keywords" content="R, Data science, Econometrics" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="https://scox3.github.io/ru/post/2021-04-09-bakken05-wells-npv-ru/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.3a5f39feb4252758bd7abbc1b9b9ca935d821cc19af111e1a22dcae852692ee0.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Bakken.05. Распределение окупаемости отдельных скважин" />
+<meta property="og:description" content="Распределение NPV скважинОговоркиСамая прибыльная скважинаЯ буду оценивать успешности инвестиций с помощью двух критериев:
+NPV (Net present value) для оценки доходности отдельных скважин. В данном случае NPV будет показывать насколько достигнуты цели по доходности, которые ставились при запуске проектов. Будет использована ставка дисконтирования чистого денежного потока, т.е. дохода после вычета всех расходов, в 5% в год, примерно соответствующая ставке по облигациям. Для каждой скважины будет использован весь период наблюдений (т." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://scox3.github.io/ru/post/2021-04-09-bakken05-wells-npv-ru/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-09T10:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2021-04-09T10:00:00&#43;00:00" /><meta property="og:site_name" content="Datascience, tools and datasets" />
+
+<meta itemprop="name" content="Bakken.05. Распределение окупаемости отдельных скважин">
+<meta itemprop="description" content="Распределение NPV скважинОговоркиСамая прибыльная скважинаЯ буду оценивать успешности инвестиций с помощью двух критериев:
+NPV (Net present value) для оценки доходности отдельных скважин. В данном случае NPV будет показывать насколько достигнуты цели по доходности, которые ставились при запуске проектов. Будет использована ставка дисконтирования чистого денежного потока, т.е. дохода после вычета всех расходов, в 5% в год, примерно соответствующая ставке по облигациям. Для каждой скважины будет использован весь период наблюдений (т."><meta itemprop="datePublished" content="2021-04-09T10:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-04-09T10:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="754">
+<meta itemprop="keywords" content="Oil,Shaleoil,Research,R," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Bakken.05. Распределение окупаемости отдельных скважин"/>
+<meta name="twitter:description" content="Распределение NPV скважинОговоркиСамая прибыльная скважинаЯ буду оценивать успешности инвестиций с помощью двух критериев:
+NPV (Net present value) для оценки доходности отдельных скважин. В данном случае NPV будет показывать насколько достигнуты цели по доходности, которые ставились при запуске проектов. Будет использована ставка дисконтирования чистого денежного потока, т.е. дохода после вычета всех расходов, в 5% в год, примерно соответствующая ставке по облигациям. Для каждой скважины будет использован весь период наблюдений (т."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/ru/" class="logo">Data science, tools and datasets</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/ru/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/ru/post/2021-04-09-bakken05-wells-npv-ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/ru/" class="logo">Data science, tools and datasets</a>
+</div>
+
+
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/ru/post/2021-04-09-bakken05-wells-npv-ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/ru/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Bakken.05. Распределение окупаемости отдельных скважин</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-09 </span>
+        <div class="post-category">
+            <a href="/ru/categories/research/"> Research </a>
+            <a href="/ru/categories/oil-market/"> Oil market </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Содержание</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      
+<script src="https://scox3.github.io/ru/post/2021-04-09-bakken05-wells-npv-ru/index.ru_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#распределение-npv-скважин">Распределение NPV скважин</a></li>
+<li><a href="#оговорки">Оговорки</a></li>
+<li><a href="#самая-прибыльная-скважина">Самая прибыльная скважина</a></li>
+</ul>
+</div>
+
+<p>Я буду оценивать успешности инвестиций с помощью двух критериев:</p>
+<ul>
+<li><p>NPV (Net present value) для оценки доходности отдельных скважин. В данном случае NPV будет показывать насколько достигнуты цели по доходности, которые ставились при запуске проектов. Будет использована ставка дисконтирования чистого денежного потока, т.е. дохода после вычета всех расходов, в 5% в год, примерно соответствующая ставке по облигациям. Для каждой скважины будет использован весь период наблюдений (т.е. в каждом случае он будет разный).</p></li>
+<li><p>Фактически полученный чистый доход за весь период с учетом выплат по заемному капиталу. Этот метод больше применим для оценки доходности портфелей проектов, так как предполагается, что если скважина дает операционный доход, то он расходуется на снижение тела долга или реинвестирование в новые проекты того же портфеля. В случае множества скважин доход по одним проектам позволяет не только покрыть убытки по другим, но и снизить тело долга или снизить потребность в заемном капитале, т.е. управлять капиталом эффективно.</p></li>
+</ul>
+<div id="распределение-npv-скважин" class="section level1">
+<h1>Распределение NPV скважин</h1>
+<p>Ниже приведены диаграммы распределения NPV. Очевидно, что намеченных показателей окупаемости достигли на сегодняшний момент менее половины скважин, завершенных в периоды 2009-2013. Скважины, открытые после удешевления нефти 2014-2015, оказываются далеки от окупаемости в 3/4 случаев, а вот проектов 2016-2017 года, достигших положительного NPV, уже заметно выше.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Скважины 2019-2020 гг. окупаемости не достигли по очевидной причине - срок их работы пока слишком мал, приведены они просто для иллюстрации тренда.</p>
+<p><img src="bakken05-wells-npv.ru_files/figure-html/wells-distr-npv-1.png" width="864" /></p>
+<p><img src="bakken05-wells-npv.ru_files/figure-html/unnamed-chunk-4-1.png" width="864" /></p>
+<p>Более того, оказывается, что в примерно половине проектов 2009-2013 гг. инвесторы не получили даже номинальный денежный доход, т. е. доход без расходов на заемные средства (дисконтирования).</p>
+<p><img src="bakken05-wells-npv.ru_files/figure-html/wells-distr-cash-1.png" width="864" /></p>
+<p>И хуже того - даже просто выручка, без учета затрат на текущее обслуживание, налоги и лицензионные платежи, смогла покрыть первоначальные затраты только для 3/4 скважин.</p>
+<p>Половина скважин, например 2009 года завершения, принесла выручку в размере от одного до двух с половиной стоимости скважины. Однако, из этой суммы 18% ушло на лицензионные платежи, 10% в виде налога штата, около 10% ушло на обслуживание и административные расходы. В сумме это почти 40% от номинальной выручки.</p>
+<p><img src="bakken05-wells-npv.ru_files/figure-html/wells-distr-revenue-1.png" width="864" /></p>
+<p>Есть несколько возможных причин наблюдаемой низкой доходности/убыточности:</p>
+<ol style="list-style-type: decimal">
+<li><p>Слишком оптимистичные ожидания цены нефти в 2009-2014 гг.</p></li>
+<li><p>Слишком оптимистичные ожидания дебитов скважин в 2009-2014 гг. Более-менее надежно находить “хорошие” места научились только в последние несколько лет.</p></li>
+<li><p>Слишком высокие налоги и лицензионные платежи для данной доходности бизнеса.</p></li>
+</ol>
+<p>Вклад ценового фактора можно приблизительно подсчитать, вычислив цену, необходимую для достижения положительного NPV при фактически полученных дебитах. Сделать это можно в разных предположениях:</p>
+<ul>
+<li><p>Доход от продажи газа и налоги на него принимаются как они были, т. е. предполагается, что цена газа больше зависела от баланса спроса и предложения, чем от цены нефти;</p></li>
+<li><p>Доход от продажи газа и налоги на него принимаются пропорциональными цене нефти.</p></li>
+</ul>
+<p>Хотя оба этих предположения - сильные упрощения, но для более чем 95% скважин разница между результатами, получаемыми такими способами, составляет менее 15%.</p>
+<p>Для достижения окупаемости при ставке дисконтирования DR=5% для 75% скважин потребовалась бы стабильная цена в нефти Северной Дакоте выше $60 ($70 WTI), а для 25-30% - выше $100 ($100 WTI) (при расчетах выручка по методу 1). Иными словами даже если бы цена на нефть сохранилась на уровне $100 WTI, то заметное число скважин “первой волны” принесло бы инвесторам убыток.</p>
+<p><img src="bakken05-wells-npv.ru_files/figure-html/wells-distr-breakeven-price-1.png" width="864" /></p>
+</div>
+<div id="оговорки" class="section level1">
+<h1>Оговорки</h1>
+<p>Естественно, все приведенные выше рассуждения верны только если выполняются предположения о соответствии модели реальному бизнесу.</p>
+<p>Например, выше предполагалось, что дебит скважины не зависит от стоимости скважины, а сама эта стоимость одинакова для всех скважин. Если это предположение нарушается, например, дебит тем больше, чем скважина дороже, то более низкодебитные проекты будут дешевле, а потому лучше окупаться.</p>
+<p>Аналогично, делались определенные предположения о размере текущих затрат, рентных платежей и прочего. Так как речь идет об отклонениях в размере единиц процентов годовых, то всего 2 M$ разницы в цене скважины (20% или 2% в год) может сделать до четверти из них рентабельными или нерентабельными с точки зрения модели.</p>
+<p>Однако, можно точно сказать, что если доходность и присутствует, то она все равно крайне низкая.</p>
+</div>
+<div id="самая-прибыльная-скважина" class="section level1">
+<h1>Самая прибыльная скважина</h1>
+<p>Из сказанного возникает вопрос - если все оценено верно, то за счет чего выживают нефтяные компании? Есть несколько вариантов:</p>
+<ul>
+<li><p>Часть затрат можно уменьшить за счет тонкостей управления активами.</p></li>
+<li><p>Возможно списывать или периодически реструктурировать долг, т. е. либо объявлять банкротство, либо прятать убытки в будущем.</p></li>
+<li><p>Компенсировать убытки по одним проектам сверхприбылью по другими проектами.</p></li>
+</ul>
+<p>Как мы видели выше, среди скважин есть несколько десятков “монстров,” которые оказываются супер-рентабельными. Например, вот эта скважина окупила примерно 60 других.</p>
+<p><img src="bakken05-wells-npv.ru_files/figure-html/most-profitable-well-1.png" width="864" /><img src="bakken05-wells-npv.ru_files/figure-html/most-profitable-well-2.png" width="864" /></p>
+<p>Вопрос, однако, в том, способны ли “монстры” покрыть все убытки от плохих проектов. Для ответа на него перейдем к рассмотрению портфеля проектов.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>*(Note. На картинках типа Boxplot нижняя граница прямоугольников соответствует значению, которое превышает 25% скважин, а верхняя - 75% скважин, центр соответствует медиане распределения)*<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Автор</span>
+    <span class="item-content">Vladislav Borkus</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">Последнее изменение</span>
+    <span class="item-content">
+        2021-04-09
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">Лицензия</span>
+    <span class="item-content">(C) Vladislav Borkus</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/ru/tags/oil/">Oil</a>
+          <a href="/ru/tags/shaleoil/">Shaleoil</a>
+          <a href="/ru/tags/research/">Research</a>
+          <a href="/ru/tags/r/">R</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/ru/post/2021-04-10-bakken06-project-portfolios-npv-ru/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Bakken.06. Портфели проектов (часть 1, NPV)</span>
+            <span class="prev-text nav-mobile">Предыдущий</span>
+          </a>
+        <a class="next" href="/ru/post/2021-04-08-bakken04-revenue-structure-ru/">
+            <span class="next-text nav-default">Bakken.04. Структура выручки</span>
+            <span class="next-text nav-mobile">Следующий</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'vladislavborkus';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="scox3@yandex.ru" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.facebook.com/vlad.borkus/" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://scox3.github.io" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://vladborkus.blogger.com" class="iconfont icon-google" title="google"></a>
+      <a href="https://github.com/scox3" class="iconfont icon-github" title="github"></a>
+  <a href="https://scox3.github.io/ru/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Создано с помощью <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Тема - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>(c) Vladislav Borkus</span>
+  </span>
+</div>
+
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSCWFD9LM9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MSCWFD9LM9');
+</script>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
