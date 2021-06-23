@@ -52,7 +52,7 @@ The first step is to download Telegram chat stream. That can be easily done with
 <meta itemprop="description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
 The first step is to download Telegram chat stream. That can be easily done with the desktop Telegram client so I will skip this step and assume that the necessary data, i."><meta itemprop="datePublished" content="2024-03-24T10:10:00&#43;00:00" />
 <meta itemprop="dateModified" content="2024-03-24T10:10:00&#43;00:00" />
-<meta itemprop="wordCount" content="1274">
+<meta itemprop="wordCount" content="1307">
 <meta itemprop="keywords" content="R,RStudio,COVID19,XML,Tools,Howto,Packages," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Dataset compilation: Telegram and HTML parsing for COVID-19 epidemic data"/>
 <meta name="twitter:description" content="The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
@@ -198,14 +198,10 @@ The first step is to download Telegram chat stream. That can be easily done with
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#step-1-load-libraries">Step 1. Load libraries.</a></li>
-        <li><a href="#step-2-load-html-file">Step 2. Load HTML file.</a></li>
-        <li><a href="#step-3-extract-data-from-htmlxml-tree">Step 3. Extract data from HTML/XML tree.</a></li>
-        <li><a href="#some-visualizations">Some visualizations</a></li>
-      </ul>
-    </li>
+    <li><a href="#step-1-load-libraries">Step 1. Load libraries.</a></li>
+    <li><a href="#step-2-load-html-file">Step 2. Load HTML file.</a></li>
+    <li><a href="#step-3-extract-data-from-htmlxml-tree">Step 3. Extract data from HTML/XML tree.</a></li>
+    <li><a href="#some-visualizations">Some visualizations</a></li>
   </ul>
 </nav>
   </div>
@@ -213,7 +209,7 @@ The first step is to download Telegram chat stream. That can be easily done with
     <div class="post-content">
       <p>The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.</p>
 <p>The first step is to download Telegram chat stream. That can be easily done with the desktop <a href="https://winaero.com/export-chat-history-file-telegram-desktop/">Telegram client</a> so I will skip this step and assume that the necessary data, i.e. a set of files &ldquo;messages.html&rdquo; is ready (<a href="https://drive.google.com/drive/folders/1RxlKL6kQ1FtsFyg9v-AutkkwGJbdNnja?usp=sharing">here is the copy</a>). Below I will explain how to convert them into a dataset.</p>
-<h2 id="step-1-load-libraries">Step 1. Load libraries.</h2>
+<h1 id="step-1-load-libraries">Step 1. Load libraries.</h1>
 <p>I will need the usual stuff plus the package <code>rvest</code> to load HTML data and <code>XML2</code> to process the HTML DOM tree.</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Usual libraries</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">purrr</span><span class="p">)</span>
@@ -221,6 +217,7 @@ The first step is to download Telegram chat stream. That can be easily done with
 <span class="nf">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">tidyr</span><span class="p">)</span>
 
 <span class="c1">#HTML processing</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">rvest</span><span class="p">)</span>
@@ -231,13 +228,13 @@ The first step is to download Telegram chat stream. That can be easily done with
 
 <span class="c1">#Regression trees</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">rpart</span><span class="p">)</span>
-</code></pre></div><h2 id="step-2-load-html-file">Step 2. Load HTML file.</h2>
+</code></pre></div><h1 id="step-2-load-html-file">Step 2. Load HTML file.</h1>
 <p>To load HTML data the function <code>read_html()</code> from the package <code>rvest</code> may be used. I assume the data are stored in the folder <code>data</code>. While the Telegram function &ldquo;Export&rdquo; created several files with messages I will use only one file with the most recent messages.</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">html1</span> <span class="o">&lt;-</span> <span class="nf">read_html</span><span class="p">(</span><span class="s">&#34;data/messages3.html&#34;</span><span class="p">)</span>
 </code></pre></div><p>To check if the data are correctly loaded the function <code>xml_name()</code> may be used. It will show the name of the root node. It is <code>html</code> in this case so everything looks ok.</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">xml_name</span><span class="p">(</span><span class="n">html1</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] &#34;html&#34;
-</code></pre></div><h2 id="step-3-extract-data-from-htmlxml-tree">Step 3. Extract data from HTML/XML tree.</h2>
+</code></pre></div><h1 id="step-3-extract-data-from-htmlxml-tree">Step 3. Extract data from HTML/XML tree.</h1>
 <p>The following steps are bases on the knowledge of the DOM structure that can be viewed in the Chrome or Firefox browsers after pressing F12 key.</p>
 <p>The task is to find the first <code>div</code> node in the document that satisfies the search criteria:\</p>
 <ul>
@@ -383,8 +380,8 @@ The first step is to download Telegram chat stream. That can be easily done with
 ## 4:     1518     7320      419       NA 2020-11-28
 ## 5:     1376     6524      431       NA 2020-12-01
 </code></pre></div><p>Store the dataset for later use.</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">write.csv</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s">&#34;covid-moscow-dataset.csv&#34;</span><span class="p">)</span>
-</code></pre></div><h2 id="some-visualizations">Some visualizations</h2>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1"># write.csv(dt.data, file=&#34;covid-moscow-dataset.csv&#34;)</span>
+</code></pre></div><h1 id="some-visualizations">Some visualizations</h1>
 <p>Now it is time to plot the data!</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggplot</span><span class="p">(</span><span class="n">dt.data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#34;Diagnosed&#34;</span><span class="p">))</span><span class="o">+</span>
   <span class="nf">geom_path</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="o">+</span>
@@ -396,13 +393,19 @@ The first step is to download Telegram chat stream. That can be easily done with
   <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
   <span class="nf">scale_x_date</span><span class="p">(</span><span class="n">date_labels</span> <span class="o">=</span> <span class="s">&#34;%d%-%m-%Y&#34;</span><span class="p">)</span>
 </code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<p>No indication for periodicity in the auto correlation function (same is in logs).</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggAcf</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">new_diag</span><span class="p">)</span><span class="o">+</span>
+<p>No strong indication for periodicity in the auto correlation function (same is in logs).</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">dt.data[</span><span class="p">,</span> <span class="n">ix</span> <span class="o">:=</span> <span class="n">date</span><span class="o">-</span> <span class="nf">min</span><span class="p">(</span><span class="n">date</span><span class="p">)</span><span class="n">]</span>
+<span class="n">dt2</span> <span class="o">&lt;-</span> <span class="nf">data.table</span><span class="p">(</span> <span class="n">ix</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">dt.data[</span><span class="p">,</span> <span class="nf">max</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span><span class="n">]</span><span class="p">))</span>
+<span class="n">dt2</span> <span class="o">&lt;-</span> <span class="nf">merge</span><span class="p">(</span> <span class="n">dt2</span><span class="p">,</span> <span class="n">dt.data</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s">&#34;ix&#34;</span><span class="p">,</span> <span class="n">all.x</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">dt2[</span> <span class="nf">is.na</span><span class="p">(</span><span class="n">date</span><span class="p">),</span> <span class="n">date</span> <span class="o">:=</span> <span class="nf">min</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">date</span><span class="p">)</span><span class="o">+</span><span class="n">ix]</span>
+<span class="n">dt.fill</span> <span class="o">&lt;-</span> <span class="n">tidyr</span><span class="o">::</span><span class="nf">fill</span><span class="p">(</span><span class="n">dt2</span><span class="p">,</span> <span class="s">&#34;new_diag&#34;</span><span class="p">,</span><span class="s">&#34;new_hosp&#34;</span><span class="p">,</span> <span class="n">.direction</span> <span class="o">=</span> <span class="s">&#34;down&#34;</span><span class="p">)</span>
+<span class="nf">rm</span><span class="p">(</span><span class="n">dt2</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">ggAcf</span><span class="p">(</span><span class="n">dt.fill</span><span class="o">$</span><span class="n">new_diag</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;MSK Covid-19: ACF of the time series the number of new cases&#34;</span><span class="p">)</span><span class="o">+</span> 
   <span class="nf">theme_bw</span><span class="p">()</span>
-</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>No clear indication for a time lag between the two series. However cross correlation function is more biases towards negative lags as it should be: diagnostic sightly precedes hospitalizations.</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">ccf1</span> <span class="o">&lt;-</span> <span class="nf">ccf</span><span class="p">(</span><span class="n">dt.data</span><span class="o">$</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">dt.data</span><span class="o">$</span><span class="n">new_hosp</span><span class="p">,</span> 
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">ccf1</span> <span class="o">&lt;-</span> <span class="nf">ccf</span><span class="p">(</span><span class="n">dt.fill</span><span class="o">$</span><span class="n">new_diag</span><span class="p">,</span> <span class="n">dt.fill</span><span class="o">$</span><span class="n">new_hosp</span><span class="p">,</span> 
             <span class="n">plot</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
 
 <span class="n">df.ccf1</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">ccf</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">acf</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">ccf1</span><span class="o">$</span><span class="n">lag</span><span class="p">)</span>
@@ -412,7 +415,7 @@ The first step is to download Telegram chat stream. That can be easily done with
   <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&#34;COVID-19 MSK: CCF new cases number ~ new hospitalizations number&#34;</span><span class="p">)</span><span class="o">+</span>
   <span class="nf">theme_bw</span><span class="p">()</span>
-</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>The ratio of the number of hospitalizations to the number of new cases grows with time. More and more sick people skip official medicine entirely.</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#Build regression tree for stepwise approximation</span>
 <span class="n">dt.data[</span> <span class="p">,</span> <span class="n">ratio.hosp.diagn</span> <span class="o">:=</span> <span class="n">new_hosp</span><span class="o">/</span><span class="n">new_diag]</span>
@@ -430,7 +433,7 @@ The first step is to download Telegram chat stream. That can be easily done with
   <span class="nf">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">+</span> 
   <span class="nf">theme_bw</span><span class="p">()</span><span class="o">+</span>
   <span class="nf">scale_x_date</span><span class="p">(</span><span class="n">date_labels</span> <span class="o">=</span> <span class="s">&#34;%d%-%m-%Y&#34;</span><span class="p">)</span>
-</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</code></pre></div><p><img src="parse_telegram_covid-en_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>Let&rsquo;s check the ratios by direct calculations:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">display_table</span><span class="o">&lt;-</span><span class="nf">function</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="p">{</span>
   <span class="nf">if</span><span class="p">(</span> <span class="nf">isTRUE</span><span class="p">(</span><span class="nf">getOption</span><span class="p">(</span><span class="s">&#39;knitr.in.progress&#39;</span><span class="p">))</span> <span class="p">)</span> <span class="p">{</span>
@@ -450,7 +453,7 @@ The first step is to download Telegram chat stream. That can be easily done with
                                   <span class="n">dt.data[</span> <span class="n">date</span> <span class="o">&gt;</span> <span class="nf">as.Date</span><span class="p">(</span><span class="s">&#34;2021-02-01&#34;</span><span class="p">),</span> <span class="nf">sum</span><span class="p">(</span><span class="n">new_hosp</span><span class="p">)</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">new_diag</span><span class="p">)</span><span class="n">]</span><span class="p">))</span>
 <span class="nf">display_table</span><span class="p">(</span><span class="n">dt.average.hz.ratio</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s">&#34;Ratio of the number of hospitalizations to the number of cases&#34;</span><span class="p">)</span>
 </code></pre></div><table>
-<caption>(\#tab:unnamed-chunk-19)Ratio of the number of hospitalizations to the number of cases</caption>
+<caption>(\#tab:unnamed-chunk-20)Ratio of the number of hospitalizations to the number of cases</caption>
  <thead>
   <tr>
    <th style="text-align:center;"> Date </th>
