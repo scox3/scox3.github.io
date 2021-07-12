@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Dataset, MSK COVID-19 12 July 2021 - Datascience, tools and datasets</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Vladislav Borkus" /><meta name="description" content="# This is a daily report on COVID-19 Moscow dataset. Code source for this report is here.
+Cyclicity estimates ## Weekly diag. cyclicity coeffs:; 1.01; 0.86; 0.83; 1.09; 1.10; 1.09; 1.06 ## Weekly hosp. cyclicity coeffs:; 0.89; 1.04; 1.01; 1.04; 1.05; 1.05; 0.94 From cyclicity coeffs we may guess that hospitalizations are really 5 days lagged relative to newly diagnosted.
+Trends ## [1] 266 Latest data table ## date new_diag new_diag_corr new_diag_week_av new_hosp new_hosp_corr ## 1: 2021-07-06 5498 6360." /><meta name="keywords" content="R, Data science, Econometrics" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="https://scox3.github.io/post/2021-07-12-msk-covid-report-en/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.3a5f39feb4252758bd7abbc1b9b9ca935d821cc19af111e1a22dcae852692ee0.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Dataset, MSK COVID-19 12 July 2021" />
+<meta property="og:description" content="# This is a daily report on COVID-19 Moscow dataset. Code source for this report is here.
+Cyclicity estimates ## Weekly diag. cyclicity coeffs:; 1.01; 0.86; 0.83; 1.09; 1.10; 1.09; 1.06 ## Weekly hosp. cyclicity coeffs:; 0.89; 1.04; 1.01; 1.04; 1.05; 1.05; 0.94 From cyclicity coeffs we may guess that hospitalizations are really 5 days lagged relative to newly diagnosted.
+Trends ## [1] 266 Latest data table ## date new_diag new_diag_corr new_diag_week_av new_hosp new_hosp_corr ## 1: 2021-07-06 5498 6360." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://scox3.github.io/post/2021-07-12-msk-covid-report-en/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-07-14T10:10:00&#43;00:00" />
+<meta property="article:modified_time" content="2021-07-14T10:10:00&#43;00:00" /><meta property="og:site_name" content="Datascience, tools and datasets" />
+
+<meta itemprop="name" content="Dataset, MSK COVID-19 12 July 2021">
+<meta itemprop="description" content="# This is a daily report on COVID-19 Moscow dataset. Code source for this report is here.
+Cyclicity estimates ## Weekly diag. cyclicity coeffs:; 1.01; 0.86; 0.83; 1.09; 1.10; 1.09; 1.06 ## Weekly hosp. cyclicity coeffs:; 0.89; 1.04; 1.01; 1.04; 1.05; 1.05; 0.94 From cyclicity coeffs we may guess that hospitalizations are really 5 days lagged relative to newly diagnosted.
+Trends ## [1] 266 Latest data table ## date new_diag new_diag_corr new_diag_week_av new_hosp new_hosp_corr ## 1: 2021-07-06 5498 6360."><meta itemprop="datePublished" content="2021-07-14T10:10:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-07-14T10:10:00&#43;00:00" />
+<meta itemprop="wordCount" content="375">
+<meta itemprop="keywords" content="R,RStudio,COVID19,Dataset," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dataset, MSK COVID-19 12 July 2021"/>
+<meta name="twitter:description" content="# This is a daily report on COVID-19 Moscow dataset. Code source for this report is here.
+Cyclicity estimates ## Weekly diag. cyclicity coeffs:; 1.01; 0.86; 0.83; 1.09; 1.10; 1.09; 1.06 ## Weekly hosp. cyclicity coeffs:; 0.89; 1.04; 1.01; 1.04; 1.05; 1.05; 0.94 From cyclicity coeffs we may guess that hospitalizations are really 5 days lagged relative to newly diagnosted.
+Trends ## [1] 266 Latest data table ## date new_diag new_diag_corr new_diag_week_av new_hosp new_hosp_corr ## 1: 2021-07-06 5498 6360."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Data science, tools and datasets</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-07-12-msk-covid-report-en/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Data science, tools and datasets</a>
+</div>
+
+
+
+  <div class="language-selector">
+    <ul class="languages-list">
+      
+        
+        
+
+        <li class="language-item ">
+          
+            <a href="https://scox3.github.io/ru/">ru</a>
+          
+        </li>
+      
+        
+        
+
+        <li class="language-item active">
+          
+            <a href="https://scox3.github.io/post/2021-07-12-msk-covid-report-en/">en</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Dataset, MSK COVID-19 12 July 2021</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-07-14 </span>
+        <div class="post-category">
+            <a href="/categories/r/"> R </a>
+            <a href="/categories/rstudio/"> RStudio </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#cyclicity-estimates">Cyclicity estimates</a></li>
+    <li><a href="#trends">Trends</a></li>
+    <li><a href="#latest-data-table">Latest data table</a></li>
+    <li><a href="#newly-hospitalized-vs-newly-disagnosted-relationship">Newly hospitalized vs. newly disagnosted relationship</a></li>
+    <li><a href="#cyclicity-decomposition-diagnostic-plots">Cyclicity decomposition diagnostic plots</a></li>
+    <li><a href="#acf-plots">ACF Plots</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#</span>
+</code></pre></div><p>This is a daily report on COVID-19 Moscow dataset. Code source for this report is <a href="https://github.com/scox3/msk_covid_report">here</a>.</p>
+<h1 id="cyclicity-estimates">Cyclicity estimates</h1>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## Weekly diag. cyclicity coeffs:; 1.01; 0.86; 0.83; 1.09; 1.10; 1.09; 1.06
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## Weekly hosp. cyclicity coeffs:; 0.89; 1.04; 1.01; 1.04; 1.05; 1.05; 0.94
+</code></pre></div><p><img src="msk_covid_report_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>From cyclicity coeffs we may guess that hospitalizations are really 5 days lagged relative to newly diagnosted.</p>
+<h1 id="trends">Trends</h1>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] 266
+</code></pre></div><p><img src="msk_covid_report_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<h1 id="latest-data-table">Latest data table</h1>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">##          date new_diag new_diag_corr new_diag_week_av new_hosp new_hosp_corr
+## 1: 2021-07-06     5498      6360.874         6776.857     1598      1531.055
+## 2: 2021-07-07     5621      6754.520         6748.000     1601      1588.553
+## 3: 2021-07-08     6040      5563.947         6525.571     1717      1656.384
+## 4: 2021-07-09     6643      6029.397         6489.857     1700      1626.196
+## 5: 2021-07-10     5694      5214.228         6239.571     1610      1538.209
+## 6: 2021-07-11     5410      5119.643         5923.286     1453      1541.010
+## 7: 2021-07-12     5403      5363.787         5758.429     1472      1655.919
+</code></pre></div><h1 id="newly-hospitalized-vs-newly-disagnosted-relationship">Newly hospitalized vs. newly disagnosted relationship</h1>
+<p>The ratio of the number of hospitalizations to the number of new cases changes with time. The more sick people skip the smaller the ratio.</p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## 
+## Call:
+## lm(formula = log(new_hosp) ~ log(new_diag), data = dt.data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.39739 -0.09287  0.00199  0.10879  0.29966 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    3.08354    0.12235    25.2   &lt;2e-16 ***
+## log(new_diag)  0.48483    0.01501    32.3   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1415 on 270 degrees of freedom
+## Multiple R-squared:  0.7944,	Adjusted R-squared:  0.7937 
+## F-statistic:  1043 on 1 and 270 DF,  p-value: &lt; 2.2e-16
+</code></pre></div><p><img src="msk_covid_report_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>The same is true for deceased time series.</p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<h1 id="cyclicity-decomposition-diagnostic-plots">Cyclicity decomposition diagnostic plots</h1>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] 0.09251658
+</code></pre></div><p><img src="msk_covid_report_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## Time Series:
+## Start = c(25, 3) 
+## End = c(26, 1) 
+## Frequency = 7 
+## [1] 6754.520 5563.947 6029.397 5214.228 5119.643 5363.787
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## [1] 6754.520 5563.947 6029.397 5214.228 5119.643 5363.787
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">## Time Series:
+## Start = c(25, 3) 
+## End = c(26, 1) 
+## Frequency = 7 
+## [1] 6200.499 5958.283 5725.529 5509.639 5301.891 5100.808
+</code></pre></div><p><img src="msk_covid_report_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<h1 id="acf-plots">ACF Plots</h1>
+<p>No clear indication for a time lag between the two series. However cross correlation function is more biases towards negative lags as it should be: diagnostic sightly precedes hospitalizations.</p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>No indication for periodicity in the auto correlation function (same is in logs).</p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><img src="msk_covid_report_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Vladislav Borkus</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-07-14
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content">(C) Vladislav Borkus</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/r/">R</a>
+          <a href="/tags/rstudio/">RStudio</a>
+          <a href="/tags/covid19/">COVID19</a>
+          <a href="/tags/dataset/">Dataset</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/2021-03-24-parse-telegram-covid/">
+            <span class="next-text nav-default">Dataset compilation: Telegram and HTML parsing for COVID-19 epidemic data</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'vladislavborkus';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="scox3@yandex.ru" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.facebook.com/vlad.borkus/" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://scox3.github.io" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://vladborkus.blogger.com" class="iconfont icon-google" title="google"></a>
+      <a href="https://github.com/scox3" class="iconfont icon-github" title="github"></a>
+  <a href="https://scox3.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>(c) Vladislav Borkus</span>
+  </span>
+</div>
+
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MSCWFD9LM9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MSCWFD9LM9');
+</script>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

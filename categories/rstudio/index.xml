@@ -10,10 +10,10 @@
     <lastBuildDate>Wed, 14 Jul 2021 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/categories/rstudio/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dataset, MSK COVID-19 12 July 2021</title>
-      <link>https://scox3.github.io/post/2021-07-12-msk-covid-report-en/index-en/</link>
+      <link>https://scox3.github.io/post/2021-07-12-msk-covid-report-en/</link>
       <pubDate>Wed, 14 Jul 2021 10:10:00 +0000</pubDate>
       
-      <guid>https://scox3.github.io/post/2021-07-12-msk-covid-report-en/index-en/</guid>
+      <guid>https://scox3.github.io/post/2021-07-12-msk-covid-report-en/</guid>
       <description># This is a daily report on COVID-19 Moscow dataset. Code source for this report is here.
 Cyclicity estimates ## Weekly diag. cyclicity coeffs:; 1.01; 0.86; 0.83; 1.09; 1.10; 1.09; 1.06 ## Weekly hosp. cyclicity coeffs:; 0.89; 1.04; 1.01; 1.04; 1.05; 1.05; 0.94 From cyclicity coeffs we may guess that hospitalizations are really 5 days lagged relative to newly diagnosted.
 Trends ## [1] 266 Latest data table ## date new_diag new_diag_corr new_diag_week_av new_hosp new_hosp_corr ## 1: 2021-07-06 5498 6360.</description>
