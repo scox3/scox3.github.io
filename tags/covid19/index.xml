@@ -7,11 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Wed, 14 Jul 2021 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/covid19/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Jul 2021 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/covid19/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dataset, MSK COVID-19 12 July 2021</title>
       <link>https://scox3.github.io/post/2021-07-12-msk-covid-report-en/</link>
-      <pubDate>Wed, 14 Jul 2021 10:10:00 +0000</pubDate>
+      <pubDate>Mon, 12 Jul 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/post/2021-07-12-msk-covid-report-en/</guid>
       <description># This is a daily report on COVID-19 Moscow dataset. Code source for this report is here.
