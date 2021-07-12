@@ -7,38 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Sun, 24 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Jul 2021 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>COVID19</title>
       <link>https://scox3.github.io/tags/covid19/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 14 Jul 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/tags/covid19/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Howto</title>
-      <link>https://scox3.github.io/tags/howto/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <title>Dataset</title>
+      <link>https://scox3.github.io/tags/dataset/</link>
+      <pubDate>Wed, 14 Jul 2021 10:10:00 +0000</pubDate>
       
-      <guid>https://scox3.github.io/tags/howto/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Packages</title>
-      <link>https://scox3.github.io/tags/packages/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
-      
-      <guid>https://scox3.github.io/tags/packages/</guid>
+      <guid>https://scox3.github.io/tags/dataset/</guid>
       <description></description>
     </item>
     
     <item>
       <title>R</title>
       <link>https://scox3.github.io/tags/r/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 14 Jul 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/tags/r/</guid>
       <description></description>
@@ -47,16 +38,34 @@
     <item>
       <title>RStudio</title>
       <link>https://scox3.github.io/tags/rstudio/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 14 Jul 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/tags/rstudio/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>Howto</title>
+      <link>https://scox3.github.io/tags/howto/</link>
+      <pubDate>Wed, 24 Mar 2021 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/howto/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Packages</title>
+      <link>https://scox3.github.io/tags/packages/</link>
+      <pubDate>Wed, 24 Mar 2021 10:10:00 +0000</pubDate>
+      
+      <guid>https://scox3.github.io/tags/packages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Tools</title>
       <link>https://scox3.github.io/tags/tools/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 24 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/tags/tools/</guid>
       <description></description>
@@ -65,7 +74,7 @@
     <item>
       <title>XML</title>
       <link>https://scox3.github.io/tags/xml/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 24 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/tags/xml/</guid>
       <description></description>

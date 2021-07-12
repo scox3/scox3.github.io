@@ -7,11 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>(c) Vladislav Borkus</copyright>
-    <lastBuildDate>Sun, 24 Mar 2024 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/howto/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 Mar 2021 10:10:00 +0000</lastBuildDate><atom:link href="https://scox3.github.io/tags/howto/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dataset compilation: Telegram and HTML parsing for COVID-19 epidemic data</title>
       <link>https://scox3.github.io/post/2021-03-24-parse-telegram-covid/</link>
-      <pubDate>Sun, 24 Mar 2024 10:10:00 +0000</pubDate>
+      <pubDate>Wed, 24 Mar 2021 10:10:00 +0000</pubDate>
       
       <guid>https://scox3.github.io/post/2021-03-24-parse-telegram-covid/</guid>
       <description>The data about hospitalizations with COVID-19 in Moscow are hard to find in public datasets. However these data are daily published in the specialized Telegram channel, so they can be parsed from there to be used in data analysis.
